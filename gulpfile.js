@@ -10,6 +10,7 @@ const rename = require('gulp-rename');
 const imagemin = require('gulp-imagemin');
 const notify = require('gulp-notify');
 const cache = require('gulp-cache');
+const GulpClient = require('gulp');
 
 const paths = {
     scss: 'src/scss/**/*.scss',
@@ -54,4 +55,5 @@ function watchArchivos() {
     watch( paths.imagenes, imagenes );
 }
   
-exports.default = parallel(css, javascript,  imagenes,  watchArchivos ); 
+exports.default = parallel(css, javascript,  imagenes,  watchArchivos );
+exports.dev = watchArchivos;
