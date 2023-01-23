@@ -1,11 +1,29 @@
 <?php
-/** BD */
+
 require '../../includes/config/database.php';
+require '../../includes/funciones.php';
+
+/** BD */
 $db = conectarDB();
 
-// var_dump($db);
+// debuguear($_SERVER);
+// debuguear($_SERVER["REQUEST_METHOD"]); /* string(3) "GET" string(4) "POST". Si visitas una URL es GET, pero cuando envías datos y especificas en el formulario que va a ser el tipo post, entonces se mandan como type post. */
 
-require '../../includes/funciones.php';
+if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+    debuguear($_POST);
+    /*
+    array(2) {
+    ["titulo"]=>
+    string(16) "Casa en la playa"
+    ["precio"]=>
+    string(5) "10000"
+    }
+    */
+
+    $titulo = $_POST['titulo'];
+    $precio = $_POST['precio'];
+}
+
 incluirTemplate('header');
 ?>
 
@@ -14,15 +32,15 @@ incluirTemplate('header');
 
     <a href="/admin" class="botom boton-verde">Volver</a>
 
-    <form class="formulario">
+    <form class="formulario" method="POST" action="/admin/propiedades/crear.php">
         <fieldset>
             <legend>Información General</legend>
 
             <label for="titulo">Título:</label>
-            <input type="text" id="titulo" placeholder="Título Propiedad">
+            <input type="text" id="titulo" name="titulo" placeholder="Título Propiedad">
 
             <label for="precio">Precio:</label>
-            <input type="number" id="precio" placeholder="Precio Propiedad">
+            <input type="number" id="precio" name="precio" placeholder="Precio Propiedad">
 
             <label for="imagen">Imagen:</label>
             <input type="file" id="imagen" accept="image/jpeg, image/png">
@@ -53,7 +71,7 @@ incluirTemplate('header');
             </select>
         </fieldset>
 
-        <input type="submit" value="CrearPropiedad" class="boton boton-verde">
+        <input type="submit" value="Crear Propiedad" class="boton boton-verde">
     </form>
 </main>
 
