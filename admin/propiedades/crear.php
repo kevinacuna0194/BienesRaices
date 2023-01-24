@@ -110,21 +110,22 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
         /** Subida de archivos **/
         /** 1- Crear carpeta */
-        $carpetaImagenes = '../../imagenes';
+        $carpetaImagenes = '../../imagenes/';
 
-        if(!is_dir($carpetaImagenes)) {
+        if (!is_dir($carpetaImagenes)) {
             mkdir($carpetaImagenes);
         }
 
-        /** 2- Subir la imagen 
-         * function move_uploaded_file(string $from, string $to): bool
-        */
-        move_uploaded_file($iamgen['tmp_name'], $carpetaImagenes . "/archivo.jpg");
+        /** 2- Generar un nombre único */
+        $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
 
-        exit;
+        /** 3- Subir la imagen 
+         * function move_uploaded_file(string $from, string $to): bool
+         */
+        move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
 
         /** Insertan en la BD */
-        $query = " INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, creado, vendedorId) VALUES ('$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedorId') ";
+        $query = " INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedorId) VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedorId') ";
 
         $resultado = mysqli_query($db, $query);
 
