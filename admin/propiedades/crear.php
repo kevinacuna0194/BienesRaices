@@ -34,14 +34,35 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     }
     */
 
-    $titulo = mysqli_real_escape_string( $db, $_POST['titulo'] );
-    $precio = mysqli_real_escape_string( $db, $_POST['precio'] );
-    $descripcion = mysqli_real_escape_string( $db, $_POST['descripcion'] );
-    $habitaciones = mysqli_real_escape_string( $db, $_POST['habitaciones'] );
-    $wc = mysqli_real_escape_string( $db, $_POST['wc'] );
-    $estacionamiento = mysqli_real_escape_string( $db, $_POST['estacionamiento'] );
-    $vendedorId = mysqli_real_escape_string( $db, $_POST['vendedor'] );
+    $titulo = mysqli_real_escape_string($db, $_POST['titulo']);
+    $precio = mysqli_real_escape_string($db, $_POST['precio']);
+    $descripcion = mysqli_real_escape_string($db, $_POST['descripcion']);
+    $habitaciones = mysqli_real_escape_string($db, $_POST['habitaciones']);
+    $wc = mysqli_real_escape_string($db, $_POST['wc']);
+    $estacionamiento = mysqli_real_escape_string($db, $_POST['estacionamiento']);
+    $vendedorId = mysqli_real_escape_string($db, $_POST['vendedor']);
     $creado = date('Y/m/d');
+
+    /** Asignar $_FILES hacia una variable */
+    $imagen = $_FILES['imagen'];
+
+    // debuguear($imagen);
+    /*
+    array(6) {
+    ["name"]=>
+    string(12) "anuncio1.jpg"
+    ["full_path"]=>
+    string(12) "anuncio1.jpg"
+    ["type"]=>
+    string(10) "image/jpeg"
+    ["tmp_name"]=>
+    string(45) "C:\Users\kevin\AppData\Local\Temp\php3016.tmp"
+    ["error"]=>
+    int(0)
+    ["size"]=>
+    int(94804)
+    }
+    */
 
     if (!$titulo) {
         $errores[] = 'Debes añadir un Título';
@@ -69,6 +90,19 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
     if (!$vendedorId) {
         $errores[] = 'Elige un Vendedor';
+    }
+
+    /** debuguear($imagen['name']); string(12) "anuncio1.jpg" / string(0) ""
+     En caso de que este valor exista, significa que el usuario se subió una imagen, en caso de que esté vacío significa que no subió nada. */
+    if (!$imagen['name'] || $imagen['error']) { // 2mb por default en php. retorna size 0 y errror 1.
+        $errores[] = 'La imagen es obligatoria';
+    }
+
+    /** Validar por tamaño (100 kb máximo ~ 100.000 bytes)*/
+    $media = 1000 * 100;
+
+    if ($imagen['size'] > $medida) {
+        $errores[] = 'La imagen es muy pesada';
     }
 
     /** revisar que el Arrat de errores este vacio **/
@@ -101,7 +135,7 @@ incluirTemplate('header');
         </div>
     <?php endforeach; ?>
 
-    <form class="formulario" method="POST" action="">
+    <form class="formulario" method="POST" action="/admin/propiedades/crear.php" enctype="multipart/form-data">
         <fieldset>
             <legend>Información General</legend>
 
@@ -112,7 +146,7 @@ incluirTemplate('header');
             <input type="number" id="precio" name="precio" placeholder="Precio Propiedad" value="<?php echo $precio ?>">
 
             <label for=" imagen">Imagen:</label>
-            <input type="file" id="imagen" accept="image/jpeg, image/png">
+            <input type="file" id="imagen" accept="image/jpeg, image/png" name="imagen">
 
             <label for="descripcion">Descripción:</label>
             <textarea id="descripcion" name="descripcion"><?php echo $descripcion ?></textarea>
