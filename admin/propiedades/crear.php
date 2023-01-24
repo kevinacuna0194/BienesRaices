@@ -98,8 +98,8 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $errores[] = 'La imagen es obligatoria';
     }
 
-    /** Validar por tamaño (100 kb máximo ~ 100.000 bytes)*/
-    $media = 1000 * 100;
+    /** Validar por tamaño (1 MB máximo ~ 1000 KB ~ 100.000.000 bytes) */
+    $medida = 1000 * 1000;
 
     if ($imagen['size'] > $medida) {
         $errores[] = 'La imagen es muy pesada';
@@ -107,10 +107,24 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
     /** revisar que el Arrat de errores este vacio **/
     if (empty($errores)) {
+
+        /** Subida de archivos **/
+        /** 1- Crear carpeta */
+        $carpetaImagenes = '../../imagenes';
+
+        if(!is_dir($carpetaImagenes)) {
+            mkdir($carpetaImagenes);
+        }
+
+        /** 2- Subir la imagen 
+         * function move_uploaded_file(string $from, string $to): bool
+        */
+        move_uploaded_file($iamgen['tmp_name'], $carpetaImagenes . "/archivo.jpg");
+
+        exit;
+
         /** Insertan en la BD */
         $query = " INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, creado, vendedorId) VALUES ('$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedorId') ";
-
-        // echo $query;
 
         $resultado = mysqli_query($db, $query);
 
