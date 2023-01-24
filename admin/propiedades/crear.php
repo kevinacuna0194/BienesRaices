@@ -11,6 +11,14 @@ $errores = [];
 // debuguear($_SERVER);
 // debuguear($_SERVER["REQUEST_METHOD"]); /* string(3) "GET" string(4) "POST". Si visitas una URL es GET, pero cuando envías datos y especificas en el formulario que va a ser el tipo post, entonces se mandan como type post. */
 
+$titulo = '';
+$precio = '';
+$descripcion = '';
+$habitaciones = '';
+$wc = '';
+$estacionamiento = '';
+$vendedorId = '';
+
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     // debuguear($_POST);
     /*
@@ -94,29 +102,29 @@ incluirTemplate('header');
             <legend>Información General</legend>
 
             <label for="titulo">Título:</label>
-            <input type="text" id="titulo" name="titulo" placeholder="Título Propiedad"">
+            <input type="text" id="titulo" name="titulo" placeholder="Título Propiedad" value="<?php echo $titulo ?>">
 
             <label for=" precio">Precio:</label>
-            <input type="number" id="precio" name="precio" placeholder="Precio Propiedad"">
+            <input type="number" id="precio" name="precio" placeholder="Precio Propiedad" value="<?php echo $precio ?>">
 
             <label for=" imagen">Imagen:</label>
             <input type="file" id="imagen" accept="image/jpeg, image/png">
 
             <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion"></textarea>
+            <textarea id="descripcion" name="descripcion"><?php echo $descripcion ?></textarea>
         </fieldset>
 
         <fielset>
             <legend>Información Propiedad</legend>
 
             <label for="habitaciones">Habitaciones:</label>
-            <input type="number" id="habitaciones" name="habitaciones" placeholder="Ej: 3" min="1" max="9"> <!-- step="2 -->
+            <input type="number" id="habitaciones" name="habitaciones" placeholder="Ej: 3" min="1" max="9" value="<?php echo $habitaciones ?>"> <!-- step="2 -->
 
             <label for="wc">Baño:</label>
-            <input type="number" id="wc" name="wc" placeholder="Ej: 3" min="1" max="9">
+            <input type="number" id="wc" name="wc" placeholder="Ej: 3" min="1" max="9" value="<?php echo $wc ?>">
 
             <label for="estacionamiento">Estacionamiento</label>
-            <input type="number" id="estacionamiento" name="estacionamiento" placeholder="Ej: 3" min="1" max="9">
+            <input type="number" id="estacionamiento" name="estacionamiento" placeholder="Ej: 3" min="1" max="9" value="<?php echo $estacionamiento ?>">
         </fielset>
 
         <fieldset>
