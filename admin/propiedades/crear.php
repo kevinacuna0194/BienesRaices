@@ -5,6 +5,9 @@ require '../../includes/funciones.php';
 /** BD */
 $db = conectarDB();
 
+/** Arreglo con mensajes de errores **/
+$errores = [];
+
 // debuguear($_SERVER);
 // debuguear($_SERVER["REQUEST_METHOD"]); /* string(3) "GET" string(4) "POST". Si visitas una URL es GET, pero cuando envías datos y especificas en el formulario que va a ser el tipo post, entonces se mandan como type post. */
 
@@ -27,18 +30,48 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $estacionamiento = $_POST['estacionamiento'];
     $vendedorId = $_POST['vendedor'];
 
-    /** Insertan en la BD */
-    $query = " INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, vendedorId) VALUES ('$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$vendedorId') ";
-
-    // echo $query;
-
-    $resultado = mysqli_query($db, $query);
-
-    if ($resultado) {
-        echo "Insertado Correctamnete";
+    if (!$titulo) {
+        $errores[] = 'Debes añadir un Título';
     }
-    else {
-        echo "No se pudo insertar el registro";
+
+    if (!$precio) {
+        $errores[] = 'El Precio es obligatorio';
+    }
+
+    if (strlen($descripcion) < 50) {
+        $errores[] = 'La Descripcion es obligatoria y debe tener al menos 50 caracteres';
+    }
+
+    if (!$habitaciones) {
+        $errores[] = 'El número de Habitaciones es obligatoria';
+    }
+
+    if (!$wc) {
+        $errores[] = 'El número de Baños es obligatorio';
+    }
+
+    if (!$estacionamiento) {
+        $errores[] = 'El número de lugares de Estacionamiento es obligatorio';
+    }
+
+    if (!$vendedorId) {
+        $errores[] = 'Elige un Vendedor';
+    }
+
+    /** revisar que el Arrat de errores este vacio **/
+    if (empty($errores)) {
+        /** Insertan en la BD */
+        $query = " INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, vendedorId) VALUES ('$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$vendedorId') ";
+
+        // echo $query;
+
+        $resultado = mysqli_query($db, $query);
+
+        if ($resultado) {
+            echo "Insertado Correctamnete";
+        } else {
+            echo "No se pudo insertar el registro";
+        }
     }
 }
 
@@ -50,17 +83,23 @@ incluirTemplate('header');
 
     <a href="/admin" class="botom boton-verde">Volver</a>
 
+    <?php foreach ($errores as $error) : ?>
+        <div class="alerta error">
+            <?php echo $error ?>
+        </div>
+    <?php endforeach; ?>
+
     <form class="formulario" method="POST" action="">
         <fieldset>
             <legend>Información General</legend>
 
             <label for="titulo">Título:</label>
-            <input type="text" id="titulo" name="titulo" placeholder="Título Propiedad">
+            <input type="text" id="titulo" name="titulo" placeholder="Título Propiedad"">
 
-            <label for="precio">Precio:</label>
-            <input type="number" id="precio" name="precio" placeholder="Precio Propiedad">
+            <label for=" precio">Precio:</label>
+            <input type="number" id="precio" name="precio" placeholder="Precio Propiedad"">
 
-            <label for="imagen">Imagen:</label>
+            <label for=" imagen">Imagen:</label>
             <input type="file" id="imagen" accept="image/jpeg, image/png">
 
             <label for="descripcion">Descripción:</label>
@@ -84,6 +123,7 @@ incluirTemplate('header');
             <legend>Vendedor</legend>
 
             <select name="vendedor">
+                <option value="">-- Seleccione --</option>
                 <option value="1">Kevin</option>
                 <option value="2">Juan</option>
             </select>
