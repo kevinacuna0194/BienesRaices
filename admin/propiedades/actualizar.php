@@ -13,9 +13,13 @@ if(!$id) {
     header('location: /admin');
 }
 
-
 /** BD */
 $db = conectarDB();
+
+$consulta = "SELECT * FROM propiedades WHERE id = $id";
+$resultado = mysqli_query($db, $consulta);
+/** Como es solo un resultado no necesitamos while() */
+$propiedad = mysqli_fetch_assoc($resultado);
 
 /** Consultar para obtener los vendedores **/
 $consulta = "SELECT * FROM vendedores";
@@ -27,13 +31,14 @@ $errores = [];
 // debuguear($_SERVER);
 // debuguear($_SERVER["REQUEST_METHOD"]); /* string(3) "GET" string(4) "POST". Si visitas una URL es GET, pero cuando envías datos y especificas en el formulario que va a ser el tipo post, entonces se mandan como type post. */
 
-$titulo = '';
-$precio = '';
-$descripcion = '';
-$habitaciones = '';
-$wc = '';
-$estacionamiento = '';
-$vendedorId = '';
+$titulo = $propiedad['titulo'];
+$precio = $propiedad['precio'];
+$descripcion = $propiedad['descripcion'];
+$habitaciones = $propiedad['habitaciones'];
+$wc = $propiedad['wc'];
+$estacionamiento = $propiedad['estacionamiento'];
+$vendedorId = $propiedad['vendedorId'];
+$imagenPropiedad = $propiedad['imagen'];
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     // debuguear($_POST);
@@ -120,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     /** revisar que el Arrat de errores este vacio **/
     if (empty($errores)) {
 
-        /** Subida de archivos **/
+        /*** Subida de archivos ***/
         /** 1- Crear carpeta */
         $carpetaImagenes = '../../imagenes/';
 
@@ -174,6 +179,8 @@ incluirTemplate('header');
 
             <label for=" imagen">Imagen:</label>
             <input type="file" id="imagen" accept="image/jpeg, image/png" name="imagen">
+
+            <img src="/imagenes/<?php echo $imagenPropiedad; ?>" class="imagen-small">
 
             <label for="descripcion">Descripción:</label>
             <textarea id="descripcion" name="descripcion"><?php echo $descripcion ?></textarea>
