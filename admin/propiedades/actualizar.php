@@ -13,7 +13,7 @@ if (!$id) {
     header('location: /admin');
 }
 
-/** BD */
+/** Conectarse a la BD */
 $db = conectarDB();
 
 $consulta = "SELECT * FROM propiedades WHERE id = $id";
