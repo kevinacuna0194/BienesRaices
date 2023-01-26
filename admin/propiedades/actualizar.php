@@ -125,23 +125,46 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
         /*** Subida de archivos ***/
         /** 1- Crear carpeta */
+        /* debuguear($imagen); 
+        *array(6) {
+        ["name"]=>
+        string(12) "anuncio1.jpg"
+        ["full_path"]=>
+        string(12) "anuncio1.jpg"
+        ["type"]=>
+        string(10) "image/jpeg"
+        ["tmp_name"]=>
+        string(45) "C:\Users\kevin\AppData\Local\Temp\phpFD4D.tmp"
+        ["error"]=>
+        int(0)
+        ["size"]=>
+        int(94804)
+        } - si esxiste es porque se subio una nueva imagen */
 
-        // $carpetaImagenes = '../../imagenes/';
+        /** Crear carpeta */
+        $carpetaImagenes = '../../imagenes/';
 
-        // if (!is_dir($carpetaImagenes)) {
-        //     mkdir($carpetaImagenes);
-        // }
+        if (!is_dir($carpetaImagenes)) {
+            mkdir($carpetaImagenes);
+        }
 
-        /** 2- Generar un nombre único */
-        // $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+        $nombreImagen = '';
 
-        /** 3- Subir la imagen 
-         * function move_uploaded_file(string $from, string $to): bool
-         */
-        // move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
+        if ($imagen['name']) { // En caso de que subamos una nueva imagen.
+            /* Eliminar imagen previa */
+            unlink($carpetaImagenes . $propiedad['imagen']);
+
+            /** Generar un nombre único */
+            $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+
+            /** Subir la imagen */
+            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
+        } else {
+            $nombreImagen = $propiedad['imagen'];
+        }
 
         /** Insertan en la BD */
-        $query = " UPDATE propiedades SET titulo = '$titulo', precio = '$precio', descripcion = '$descripcion', habitaciones = $habitaciones, wc = $wc, estacionamiento = $estacionamiento, creado = '$creado', vendedorId = $vendedorId WHERE id = $id";
+        $query = " UPDATE propiedades SET titulo = '$titulo', precio = '$precio', imagen = '$nombreImagen', descripcion = '$descripcion', habitaciones = $habitaciones, wc = $wc, estacionamiento = $estacionamiento, creado = '$creado', vendedorId = $vendedorId WHERE id = $id";
 
         $resultado = mysqli_query($db, $query);
 
