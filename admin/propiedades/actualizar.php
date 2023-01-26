@@ -7,9 +7,9 @@ $id = $_GET['id'];
 //Reescribir variable
 $id = filter_var($id, FILTER_VALIDATE_INT);
 
-var_dump($id); /** int(4) / bool(false)*/
+// var_dump($id); /** int(4) / bool(false)*/
 
-if(!$id) {
+if (!$id) {
     header('location: /admin');
 }
 
@@ -109,15 +109,13 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $errores[] = 'Elige un Vendedor';
     }
 
-    /** debuguear($imagen['name']); string(12) "anuncio1.jpg" / string(0) ""
-     En caso de que este valor exista, significa que el usuario se subió una imagen, en caso de que esté vacío significa que no subió nada. */
-    if (!$imagen['name'] || $imagen['error']) { // 2mb por default en php. retorna size 0 y errror 1.
+    /** No es obligatorio subir una nueva imagen en actualizar **/
+    /* if (!$imagen['name'] || $imagen['error']) { // 2mb por default en php. retorna size 0 y errror 1.
         $errores[] = 'La imagen es obligatoria';
-    }
+    } */
 
     /** Validar por tamaño (1 MB máximo ~ 1000 KB ~ 100.000.000 bytes) */
     $medida = 1000 * 1000;
-
     if ($imagen['size'] > $medida) {
         $errores[] = 'La imagen es muy pesada';
     }
@@ -127,28 +125,29 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
         /*** Subida de archivos ***/
         /** 1- Crear carpeta */
-        $carpetaImagenes = '../../imagenes/';
 
-        if (!is_dir($carpetaImagenes)) {
-            mkdir($carpetaImagenes);
-        }
+        // $carpetaImagenes = '../../imagenes/';
+
+        // if (!is_dir($carpetaImagenes)) {
+        //     mkdir($carpetaImagenes);
+        // }
 
         /** 2- Generar un nombre único */
-        $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+        // $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
 
         /** 3- Subir la imagen 
          * function move_uploaded_file(string $from, string $to): bool
          */
-        move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
+        // move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
 
         /** Insertan en la BD */
-        $query = " INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedorId) VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedorId') ";
+        $query = " UPDATE propiedades SET titulo = '$titulo', precio = '$precio', descripcion = '$descripcion', habitaciones = $habitaciones, wc = $wc, estacionamiento = $estacionamiento, creado = '$creado', vendedorId = $vendedorId WHERE id = $id";
 
         $resultado = mysqli_query($db, $query);
 
         if ($resultado) {
             /** Redireccionar al usuario */
-            header('location: /admin?resultado=1');
+            header('location: /admin?resultado=2');
         }
     }
 }
@@ -167,7 +166,7 @@ incluirTemplate('header');
         </div>
     <?php endforeach; ?>
 
-    <form class="formulario" method="POST" action="/admin/propiedades/crear.php" enctype="multipart/form-data">
+    <form class="formulario" method="POST" action="" enctype="multipart/form-data">
         <fieldset>
             <legend>Información General</legend>
 
