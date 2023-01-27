@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
         $resultado = mysqli_query($db, $query);
 
+        /*
         echo '<pre>';
         var_dump($resultado);
         echo '</pre>';
@@ -54,6 +55,20 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         /** Comprobar que haya resultados en la consulta (si existe) */
         if($resultado->num_rows) {
             /** Revisar si el password es correcto */
+            $usuario = mysqli_fetch_assoc($resultado);
+
+            /** @param string $password — The user's password. 
+             * @param string $hash — A hash created by password_hash(). 
+             * @return bool — Returns TRUE if the password and hash match, or FALSE otherwise. */
+            $auth = password_verify($password, $usuario['password']);
+
+            if ($auth) {
+                /** El usuario está autenticado */
+
+            } else {
+                /** Password incorrecto */
+                $errores[]  = 'El Password es incorrecto';
+            }
 
         } else {
             $errores[] = 'El Usuario no existe';
