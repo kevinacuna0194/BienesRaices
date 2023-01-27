@@ -29,7 +29,35 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     }
 
     if(empty($errores)) {
-        
+        $query = "SELECT * FROM usuarios WHERE email = '{$email}'";
+
+        $resultado = mysqli_query($db, $query);
+
+        echo '<pre>';
+        var_dump($resultado);
+        echo '</pre>';
+        /*
+        object(mysqli_result)#2 (5) {
+        ["current_field"]=>
+        int(0)
+        ["field_count"]=>
+        int(3)
+        ["lengths"]=>
+        NULL
+        ["num_rows"]=>
+        int(1)
+        ["type"]=>
+        int(0)
+        }
+        */
+
+        /** Comprobar que haya resultados en la consulta (si existe) */
+        if($resultado->num_rows) {
+            /** Revisar si el password es correcto */
+
+        } else {
+            $errores[] = 'El Usuario no existe';
+        }
     }
 }
 
