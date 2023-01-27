@@ -1,5 +1,27 @@
 <?php
 
+session_start();
+
+/*
+echo '<pre>';
+var_dump($_SESSION);
+echo '</pre>';
+/*
+array(2) {
+  ["usuario"]=>
+  string(17) "correo@correo.com"
+  ["login"]=>
+  bool(true)
+}
+*/
+
+/** Leer la variable de $_SESSION */
+$auth = $_SESSION['login'];
+
+if (!$auth) {
+    header('location: /');
+}
+
 /** 1- Importar la conexión */
 include '../includes/config/database.php';
 $db = conectarDB();

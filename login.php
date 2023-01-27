@@ -1,4 +1,5 @@
 <?php
+
 /** Conectar BD */
 require 'includes/config/database.php';
 $db = conectarDB();
@@ -28,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $errores[] = 'El Password es obligatorio';
     }
 
-    if(empty($errores)) {
+    if (empty($errores)) {
         $query = "SELECT * FROM usuarios WHERE email = '{$email}'";
 
         $resultado = mysqli_query($db, $query);
@@ -53,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         */
 
         /** Comprobar que haya resultados en la consulta (si existe) */
-        if($resultado->num_rows) {
+        if ($resultado->num_rows) {
             /** Revisar si el password es correcto */
             $usuario = mysqli_fetch_assoc($resultado);
 
@@ -64,12 +65,37 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
             if ($auth) {
                 /** El usuario está autenticado */
+                session_start();
 
+                /*
+                echo '<pre>';
+                var_dump($_SESSION);
+                echo '</pre>';
+                /*
+                array(0) { }
+                */
+
+                /** Llenar el arreglo de la sesión */
+                $_SESSION['usuario'] = $usuario['email'];
+                $_SESSION['login'] = true;
+
+                /*
+                echo '<pre>';
+                var_dump($_SESSION);
+                echo '</pre>';
+                /*
+                array(2) {
+                ["usuario"]=>
+                string(17) "correo@correo.com"
+                ["login"]=>
+                bool(true)
+                }
+                */
+                
             } else {
                 /** Password incorrecto */
                 $errores[]  = 'El Password es incorrecto';
             }
-
         } else {
             $errores[] = 'El Usuario no existe';
         }
