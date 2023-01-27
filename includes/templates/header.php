@@ -1,3 +1,19 @@
+<?php
+
+/** La sesión va estar disponible en los diferentes archivos
+ * La sesión en /admin/index.php esta protegida y accedemos a través de la funcó.
+ * Para acceder a $_SESSION en el resto de las páginas primero tengo que iniciar la sesión.
+ */
+if (!isset($_SESSION)) {
+    session_start();
+}
+
+$auth = $_SESSION['login'] ?? false;
+// var_dump($auth);
+/** Si estoy autenticado bool(true) */
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -28,6 +44,11 @@
                         <a href="anuncios.php">Anuncios</a>
                         <a href="blog.php">Blog</a>
                         <a href="contacto.php">Contacto</a>
+                        <?php if ($auth) : ?>
+                            <a href="/cerrar-sesion.php">Cerrar Sesión</a>
+                        <?php elseif (!$auth) : ?>
+                            <a href="/login.php">Iniciar Sesión</a>
+                        <?php endif; ?>
                     </nav>
                 </div>
 

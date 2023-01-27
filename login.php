@@ -1,4 +1,5 @@
 <?php
+
 /** Conectar BD */
 require 'includes/config/database.php';
 $db = conectarDB();
@@ -90,6 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 bool(true)
                 }
                 */
+
+                header('location: /admin');
             } else {
                 /** Password incorrecto */
                 $errores[]  = 'El Password es incorrecto';
