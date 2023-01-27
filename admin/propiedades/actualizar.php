@@ -1,8 +1,11 @@
 <?php
-require '../../includes/config/database.php';
 require '../../includes/funciones.php';
+$auth = estaAutenticado();
 
-/** Validar que sea un ID válido */
+if (!$auth) {
+    header('location: /');
+}
+
 $id = $_GET['id'];
 //Reescribir variable
 $id = filter_var($id, FILTER_VALIDATE_INT);
@@ -14,6 +17,7 @@ if (!$id) {
 }
 
 /** Conectarse a la BD */
+require '../../includes/config/database.php';
 $db = conectarDB();
 
 $consulta = "SELECT * FROM propiedades WHERE id = $id";

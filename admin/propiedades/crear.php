@@ -1,8 +1,13 @@
 <?php
-require '../../includes/config/database.php';
 require '../../includes/funciones.php';
+$auth = estaAutenticado();
+
+if (!$auth) {
+    header('location: /');
+}
 
 /** BD */
+require '../../includes/config/database.php';
 $db = conectarDB();
 
 /** Consultar para obtener los vendedores **/

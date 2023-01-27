@@ -1,22 +1,6 @@
 <?php
-
-session_start();
-
-/*
-echo '<pre>';
-var_dump($_SESSION);
-echo '</pre>';
-/*
-array(2) {
-  ["usuario"]=>
-  string(17) "correo@correo.com"
-  ["login"]=>
-  bool(true)
-}
-*/
-
-/** Leer la variable de $_SESSION */
-$auth = $_SESSION['login'];
+include '../includes/funciones.php';
+$auth = estaAutenticado();
 
 if (!$auth) {
     header('location: /');
@@ -69,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 /** Incluir template */
-include '../includes/funciones.php';
 incluirTemplate('header');
 ?>
 
