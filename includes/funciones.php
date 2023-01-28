@@ -15,31 +15,14 @@ function debuguear($variable)
     echo "<pre>";
     var_dump($variable);
     echo "</pre>";
+    exit;
 }
 
-function estaAutenticado(): bool
+function estaAutenticado()
 {
     session_start();
 
-    /*
-    echo '<pre>';
-    var_dump($_SESSION);
-    echo '</pre>';
-    /*
-    array(2) {
-      ["usuario"]=>
-      string(17) "correo@correo.com"
-      ["login"]=>
-      bool(true)
+    if (!$_SESSION['login']) {
+        header('location: /');
     }
-    */
-
-    /** Leer la variable de $_SESSION */
-    $auth = $_SESSION['login'];
-
-    if ($auth) {
-        return true;
-    }
-
-    return false;
 }

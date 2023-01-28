@@ -7,5 +7,3 @@ require __DIR__ . '/../vendor/autoload.php';
 use App\Propiedad; /** Importar Clase */
 
 $propiedad = new Propiedad;
-
-debuguear($propiedad);
