@@ -6,7 +6,8 @@ if (!$id) {
     header('location: /');
 }
 
-require 'includes/config/database.php';
+require 'includes/app.php';
+
 $db = conectarDB();
 
 /** Consultar */
@@ -15,6 +16,7 @@ $query = "SELECT * FROM propiedades WHERE id = {$id}";
 /** Leer los resultados */
 $resultado = mysqli_query($db, $query);
 
+/*
 echo "<pre>";
 var_dump($resultado);
 /* object(mysqli_result)#2 (5) {
@@ -29,7 +31,7 @@ var_dump($resultado);
   ["type"]=>
   int(0)
 } */
-echo "</pre>";
+// echo "</pre>"; 
 
 if (!$resultado->num_rows) {
     header('location: /');
@@ -37,7 +39,6 @@ if (!$resultado->num_rows) {
 
 $propiedad = mysqli_fetch_assoc($resultado);
 
-require 'includes/funciones.php';
 incluirTemplate('header');
 ?>
 

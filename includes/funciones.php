@@ -1,6 +1,8 @@
 <?php
 
-require 'app.php';
+/* Constantes - Llave y valor */
+define('TEMPLATES_URL', __DIR__ . '/templates');
+define('FUNCIONES_URL', __DIR__ . 'funciones.php');
 
 function incluirTemplate(string $nombre, bool $inicio = false)
 {

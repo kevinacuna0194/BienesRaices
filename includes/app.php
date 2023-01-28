@@ -1,5 +1,11 @@
 <?php
 
-/* Llave y valor */
-define('TEMPLATES_URL', __DIR__ . '/templates');
-define('FUNCIONES_URL', __DIR__ . 'funciones.php');
+require 'funciones.php';
+require 'config/database.php';
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Propiedad; /** Importar Clase */
+
+$propiedad = new Propiedad;
+
+debuguear($propiedad);

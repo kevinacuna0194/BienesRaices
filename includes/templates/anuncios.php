@@ -1,8 +1,5 @@
 <?php
 
-/** Importar la BD */
-/** Recuerda, los requires son relativos al documento que lo están mandando llamar, es decir, sería el index.php, pero si la colocas __DIR__, entonces ya va a ser relativo hacia este otro documento.*/
-require __DIR__ . '/../config/database.php';
 $db = conectarDB();
 
 /** Consultar */
