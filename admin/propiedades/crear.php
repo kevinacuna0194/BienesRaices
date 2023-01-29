@@ -12,8 +12,9 @@ $db = conectarDB();
 $consulta = "SELECT * FROM vendedores";
 $resultado = mysqli_query($db, $consulta);
 
-/** Arreglo con mensajes de errores **/
-$errores = [];
+/** Arreglo con mensajes de errores 
+ * Para que no marque undefined **/
+$errores = Propiedad::getErrores();
 
 // debuguear($_SERVER);
 // debuguear($_SERVER["REQUEST_METHOD"]); /* string(3) "GET" string(4) "POST". Si visitas una URL es GET, pero cuando envías datos y especificas en el formulario que va a ser el tipo post, entonces se mandan como type post. */
@@ -28,110 +29,37 @@ $vendedorId = '';
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
-    $propiedad = new Propiedad($_POST);
     /** Objeto con la instancia a la Clase */
+    $propiedad = new Propiedad($_POST);
 
-    $propiedad->guardar();
-
-    debuguear($propiedad);
-    /*
-    object(App\Propiedad)#6 (10) {
-    ["id"]=>
-    string(0) ""
-    ["titulo"]=>
-    string(9) "Neverland"
-    ["precio"]=>
-    string(6) "100000"
-    ["imagen"]=>
-    string(0) ""
-    ["descripcion"]=>
-    string(424) "Vivamus at lectus sit amet nunc viverra viverra. Nunc libero magna, bibendum vitae erat nec, venenatis pharetra felis. Proin nunc diam, consectetur at tellus id, porta suscipit lacus. Aenean eu velit libero. Etiam at pharetra lacus. Praesent a lectus sit amet orci consectetur fermentum. Pellentesque commodo auctor ultrices. Maecenas urna purus, ullamcorper vel turpis tempor, lobortis feugiat nisl. Pellentesque porttitor."
-    ["habitaciones"]=>
-    string(0) ""
-    ["wc"]=>
-    string(1) "2"
-    ["estacionamiento"]=>
-    string(1) "3"
-    ["creado"]=>
-    string(0) ""
-    ["vendedorId"]=>
-    string(0) ""
-    }
-    */
-
-    $titulo = mysqli_real_escape_string($db, $_POST['titulo']);
-    $precio = mysqli_real_escape_string($db, $_POST['precio']);
-    $descripcion = mysqli_real_escape_string($db, $_POST['descripcion']);
-    $habitaciones = mysqli_real_escape_string($db, $_POST['habitaciones']);
-    $wc = mysqli_real_escape_string($db, $_POST['wc']);
-    $estacionamiento = mysqli_real_escape_string($db, $_POST['estacionamiento']);
-    $vendedorId = mysqli_real_escape_string($db, $_POST['vendedor']);
-    $creado = date('Y/m/d');
-
-    /** Asignar $_FILES hacia una variable */
-    $imagen = $_FILES['imagen'];
-
-    // debuguear($imagen);
-    /*
-    array(6) {
-    ["name"]=>
-    string(12) "anuncio1.jpg"
-    ["full_path"]=>
-    string(12) "anuncio1.jpg"
-    ["type"]=>
-    string(10) "image/jpeg"
-    ["tmp_name"]=>
-    string(45) "C:\Users\kevin\AppData\Local\Temp\php3016.tmp"
-    ["error"]=>
-    int(0)
-    ["size"]=>
-    int(94804)
-    }
-    */
-
-    if (!$titulo) {
-        $errores[] = 'Debes añadir un Título';
-    }
-
-    if (!$precio) {
-        $errores[] = 'El Precio es obligatorio';
-    }
-
-    if (strlen($descripcion) < 50) {
-        $errores[] = 'La Descripcion es obligatoria y debe tener al menos 50 caracteres';
-    }
-
-    if (!$habitaciones) {
-        $errores[] = 'El número de Habitaciones es obligatoria';
-    }
-
-    if (!$wc) {
-        $errores[] = 'El número de Baños es obligatorio';
-    }
-
-    if (!$estacionamiento) {
-        $errores[] = 'El número de lugares de Estacionamiento es obligatorio';
-    }
-
-    if (!$vendedorId) {
-        $errores[] = 'Elige un Vendedor';
-    }
-
-    /** debuguear($imagen['name']); string(12) "anuncio1.jpg" / string(0) ""
-     En caso de que este valor exista, significa que el usuario se subió una imagen, en caso de que esté vacío significa que no subió nada. */
-    if (!$imagen['name'] || $imagen['error']) { // 2mb por default en php. retorna size 0 y errror 1.
-        $errores[] = 'La imagen es obligatoria';
-    }
-
-    /** Validar por tamaño (1 MB máximo ~ 1000 KB ~ 100.000.000 bytes) */
-    $medida = 1000 * 1000;
-
-    if ($imagen['size'] > $medida) {
-        $errores[] = 'La imagen es muy pesada';
-    }
+    $errores = $propiedad->validar();
 
     /** revisar que el Arrat de errores este vacio **/
     if (empty($errores)) {
+
+        $propiedad->guardar();
+
+        /** Asignar $_FILES hacia una variable */
+        $imagen = $_FILES['imagen'];
+
+        // debuguear($imagen);
+        /*
+        array(6) {
+        ["name"]=>
+        string(12) "anuncio1.jpg"
+        ["full_path"]=>
+        string(12) "anuncio1.jpg"
+        ["type"]=>
+        string(10) "image/jpeg"
+        ["tmp_name"]=>
+        string(45) "C:\Users\kevin\AppData\Local\Temp\php3016.tmp"
+        ["error"]=>
+        int(0)
+        ["size"]=>
+        int(94804)
+        }
+        */
+
 
         /** Subida de archivos **/
         /** 1- Crear carpeta */
