@@ -50,10 +50,24 @@ class Propiedad
         /** Arreglo de Atributos ya Sanitizados */
         $atributos = $this->sanitizarAtributos();
 
-        debuguear($atributos);
+        /** Conbertir las posiciones del array_keys() en strings 
+         * 2 parametros. 1- Separador. 2- Array
+        */
+        // $string = join(', ', array_keys($atributos));
+        // $string = join(', ', array_values($atributos));
+        // debuguear($string);
+        /** string(82) "titulo, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedorId" */
+        /** string(475) "Neverland, imagen.jpg, \r\nVivamus at lectus sit amet nunc viverra viverra. Nunc libero magna, bibendum vitae erat nec, venenatis pharetra felis. Proin nunc diam, consectetur at tellus id, porta suscipit lacus. Aenean eu velit libero. Etiam at pharetra lacus. Praesent a lectus sit amet orci consectetur fermentum. Pellentesque commodo auctor ultrices. Maecenas urna purus, ullamcorper vel turpis tempor, lobortis feugiat nisl. Pellentesque porttitor., 1, 1, 1, 2023/01/29, 2" */
 
         /** Insertan en la BD */
-        $query = "INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedorId) VALUES ('$this->titulo', '$this->precio', '$this->imagen', '$this->descripcion', '$this->habitaciones', '$this->wc', '$this->estacionamiento', '$this->creado', '$this->vendedorId')";
+        $query = "INSERT INTO propiedades (";
+        $query .= join(', ', array_keys($atributos));
+        $query .= ") VALUES ('";
+        $query .= join("', '", array_values($atributos));
+        $query .= "')";
+
+        // debuguear($query);
+        /** string(609) "INSERT INTO propiedades (titulo, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedorId) VALUES ('Neverland', 'imagen.jpg', '\r\nVivamus at lectus sit amet nunc viverra viverra. Nunc libero magna, bibendum vitae erat nec, venenatis pharetra felis. Proin nunc diam, consectetur at tellus id, porta suscipit lacus. Aenean eu velit libero. Etiam at pharetra lacus. Praesent a lectus sit amet orci consectetur fermentum. Pellentesque commodo auctor ultrices. Maecenas urna purus, ullamcorper vel turpis tempor, lobortis feugiat nisl. Pellentesque porttitor.', '1', '1', '1', '2023/01/29', '2')" */
 
         $resultado = self::$db->query($query);
 
