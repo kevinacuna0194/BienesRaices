@@ -3,7 +3,6 @@
 use App\Propiedad;
 
 require '../../includes/app.php';
-
 estaAutenticado();
 
 /** BD */
