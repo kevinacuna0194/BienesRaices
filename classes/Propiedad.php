@@ -26,7 +26,14 @@ class Propiedad
         $this->habitaciones = $args['habitaciones'] ?? '';
         $this->wc = $args['wc'] ?? '';
         $this->estacionamiento = $args['estacionamiento'] ?? '';
-        $this->creado = $args['creado'] ?? '';
+        $this->creado = date('Y/m/d');
         $this->vendedorId = $args['vendedorId'] ?? '';
+    }
+    
+    public function guardar() {
+        /** Insertan en la BD */
+        $query = "INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedorId) VALUES ('$this->titulo', '$this->precio', '$this->imagen', '$this->descripcion', '$this->habitaciones', '$this->wc', '$this->estacionamiento', '$this->creado', '$this->vendedorId')";
+
+        debuguear($query);
     }
 }

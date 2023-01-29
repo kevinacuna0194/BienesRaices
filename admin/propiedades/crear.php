@@ -1,4 +1,7 @@
 <?php
+
+use App\Propiedad;
+
 require '../../includes/app.php';
 
 estaAutenticado();
@@ -25,13 +28,34 @@ $estacionamiento = '';
 $vendedorId = '';
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-    // debuguear($_POST);
+
+    $propiedad = new Propiedad($_POST); /** Objeto con la instancia a la Clase */
+
+    $propiedad->guardar();
+
+    debuguear($propiedad);
     /*
-    array(2) {
+    object(App\Propiedad)#6 (10) {
+    ["id"]=>
+    string(0) ""
     ["titulo"]=>
-    string(16) "Casa en la playa"
+    string(9) "Neverland"
     ["precio"]=>
-    string(5) "10000"
+    string(6) "100000"
+    ["imagen"]=>
+    string(0) ""
+    ["descripcion"]=>
+    string(424) "Vivamus at lectus sit amet nunc viverra viverra. Nunc libero magna, bibendum vitae erat nec, venenatis pharetra felis. Proin nunc diam, consectetur at tellus id, porta suscipit lacus. Aenean eu velit libero. Etiam at pharetra lacus. Praesent a lectus sit amet orci consectetur fermentum. Pellentesque commodo auctor ultrices. Maecenas urna purus, ullamcorper vel turpis tempor, lobortis feugiat nisl. Pellentesque porttitor."
+    ["habitaciones"]=>
+    string(0) ""
+    ["wc"]=>
+    string(1) "2"
+    ["estacionamiento"]=>
+    string(1) "3"
+    ["creado"]=>
+    string(0) ""
+    ["vendedorId"]=>
+    string(0) ""
     }
     */
 
@@ -125,9 +149,6 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
          */
         move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
 
-        /** Insertan en la BD */
-        $query = " INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedorId) VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedorId') ";
-
         $resultado = mysqli_query($db, $query);
 
         if ($resultado) {
@@ -184,7 +205,7 @@ incluirTemplate('header');
         <fieldset>
             <legend>Vendedor</legend>
 
-            <select name="vendedor">
+            <select name="vendedorId">
                 <option value="">-- Seleccione --</option>
                 <?php while ($vendedor = mysqli_fetch_assoc($resultado)) : ?>
                     <option <?php echo $vendedorId === $vendedor['id'] ? 'selected' : ''; ?> value="<?php echo $vendedor['id']; ?>"><?php echo $vendedor['nombre'] . " " . $vendedor['apellido']; ?></option>
