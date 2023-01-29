@@ -29,7 +29,8 @@ $vendedorId = '';
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
-    $propiedad = new Propiedad($_POST); /** Objeto con la instancia a la Clase */
+    $propiedad = new Propiedad($_POST);
+    /** Objeto con la instancia a la Clase */
 
     $propiedad->guardar();
 
