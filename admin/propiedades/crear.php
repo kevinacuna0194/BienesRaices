@@ -1,8 +1,11 @@
 <?php
 
-use App\Propiedad;
-
 require '../../includes/app.php';
+
+use App\Propiedad;
+/* import the Intervention Image Manager Class */
+use Intervention\Image\ImageManagerStatic as Image;
+
 estaAutenticado();
 
 /** BD */
@@ -16,9 +19,6 @@ $resultado = mysqli_query($db, $consulta);
  * Para que no marque undefined **/
 $errores = Propiedad::getErrores();
 
-// debuguear($_SERVER);
-// debuguear($_SERVER["REQUEST_METHOD"]); /* string(3) "GET" string(4) "POST". Si visitas una URL es GET, pero cuando envías datos y especificas en el formulario que va a ser el tipo post, entonces se mandan como type post. */
-
 $titulo = '';
 $precio = '';
 $descripcion = '';
@@ -29,56 +29,39 @@ $vendedorId = '';
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
-    /** Objeto con la instancia a la Clase */
+    /** Crear Objeto con la instancia a la Clase */
     $propiedad = new Propiedad($_POST);
 
+    /** Subida de archivos **/
+    /** 2- Generar un nombre único */
+    $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+
+    if ($_FILES['imagen']['tmp_name']) {
+        /** Setear la imagen */
+        /** Realiza un resize a la imagen con Intervention */
+        $imagen = Image::make($_FILES['imagen']['tmp_name'])->fit(800, 600);
+        $propiedad->setImagen($nombreImagen);
+    }
+
+    /** Validar */
     $errores = $propiedad->validar();
 
     /** revisar que el Arrat de errores este vacio **/
     if (empty($errores)) {
 
-        $propiedad->guardar();
-
-        /** Asignar $_FILES hacia una variable */
-        $imagen = $_FILES['imagen'];
-
-        // debuguear($imagen);
-        /*
-        array(6) {
-        ["name"]=>
-        string(12) "anuncio1.jpg"
-        ["full_path"]=>
-        string(12) "anuncio1.jpg"
-        ["type"]=>
-        string(10) "image/jpeg"
-        ["tmp_name"]=>
-        string(45) "C:\Users\kevin\AppData\Local\Temp\php3016.tmp"
-        ["error"]=>
-        int(0)
-        ["size"]=>
-        int(94804)
-        }
-        */
-
-
-        /** Subida de archivos **/
-        /** 1- Crear carpeta */
         $carpetaImagenes = '../../imagenes/';
 
-        if (!is_dir($carpetaImagenes)) {
-            mkdir($carpetaImagenes);
+        /** Crear carpeta para subir imagenes */
+        if (!is_dir(CARPETA_IMAGENES)) {
+            mkdir(CARPETA_IMAGENES);
         }
+        /** Guardar la imagen el servidor */
+        $image->save(CARPETA_IMAGENES . $nombreImagen);
 
-        /** 2- Generar un nombre único */
-        $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+        /** Guardar en la BD */
+        $resultado = $propiedad->guardar();
 
-        /** 3- Subir la imagen 
-         * function move_uploaded_file(string $from, string $to): bool
-         */
-        move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
-
-        $resultado = mysqli_query($db, $query);
-
+        /** Mensaje de éxito o error */
         if ($resultado) {
             /** Redireccionar al usuario */
             header('location: /admin?resultado=1');
