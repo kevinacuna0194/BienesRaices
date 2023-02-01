@@ -4,6 +4,7 @@ include '../includes/app.php';
 estaAutenticado();
 
 /** Importar Clase */
+
 use App\Propiedad;
 
 /** Implementar un Método para obtener las Propiedades */
@@ -75,22 +76,22 @@ incluirTemplate('header');
         </thead>
 
         <tbody> <!-- 4- Mostrar los resultados -->
-            <?php while ($propiedad = mysqli_fetch_assoc($consulta)) : ?>
+            <?php foreach ($propiedades as $propiedad) : ?>
                 <tr>
-                    <td> <?php echo $propiedad['id']; ?> </td>
-                    <td> <?php echo $propiedad['titulo']; ?> </td>
-                    <td> <img src="/imagenes/<?php echo $propiedad['imagen']; ?>" alt="Imagen Tabla" class="imagen-tabla"></td>
-                    <td>$ <?php echo $propiedad['precio']; ?> </td>
+                    <td> <?php echo $propiedad->id; ?> </td>
+                    <td> <?php echo $propiedad->titulo; ?> </td>
+                    <td> <img src="/imagenes/<?php echo $propiedad->imagen; ?>" alt="Imagen Tabla" class="imagen-tabla"></td>
+                    <td>$ <?php echo $propiedad->precio; ?> </td>
                     <td>
                         <form method="POST" class="w-100">
-                            <input type="hidden" name="id" value="<?php echo $propiedad['id']; ?>">
+                            <input type="hidden" name="id" value="<?php echo $propiedad->id; ?>">
                             <input type="submit" class="boton-rojo-block" value="Eliminar">
                         </form>
 
-                        <a href="admin/propiedades/actualizar.php?id=<?php echo $propiedad['id']; ?>" class="boton-amarillo-block">Actualizar</a>
+                        <a href="admin/propiedades/actualizar.php?id=<?php echo $propiedad->id; ?>" class="boton-amarillo-block">Actualizar</a>
                     </td>
                 </tr>
-            <?php endwhile; ?>
+            <?php endforeach; ?>
         </tbody>
     </table>
 </main>
