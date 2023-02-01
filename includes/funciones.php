@@ -27,3 +27,10 @@ function estaAutenticado()
         header('location: /');
     }
 }
+
+/** Escapa el HTML */
+function s($html) : string
+{
+    $s = htmlspecialchars($html);
+    return $s;
+}
