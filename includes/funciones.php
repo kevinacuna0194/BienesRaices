@@ -27,4 +27,3 @@ function estaAutenticado()
         header('location: /');
     }
 }
-

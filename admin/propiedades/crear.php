@@ -39,17 +39,15 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     if ($_FILES['imagen']['tmp_name']) {
         /** Setear la imagen */
         /** Realiza un resize a la imagen con Intervention */
-        $imagen = Image::make($_FILES['imagen']['tmp_name'])->fit(800, 600);
+        $image = Image::make($_FILES['imagen']['tmp_name'])->fit(800, 600);
         $propiedad->setImagen($nombreImagen);
     }
 
     /** Validar */
     $errores = $propiedad->validar();
 
-    /** revisar que el Arrat de errores este vacio **/
+    /** revisar que el Array de errores este vacio **/
     if (empty($errores)) {
-
-        $carpetaImagenes = '../../imagenes/';
 
         /** Crear carpeta para subir imagenes */
         if (!is_dir(CARPETA_IMAGENES)) {

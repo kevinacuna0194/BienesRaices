@@ -25,6 +25,14 @@ class Propiedad
     public $creado;
     public $vendedorId;
 
+    /** Definir la conexón a la BD 
+     * El método también tiene que ser estático.
+     */
+    static function setDB($database)
+    {
+        self::$db = $database;
+    }
+
     public function __construct($args = [])
     {
 
@@ -38,14 +46,6 @@ class Propiedad
         $this->estacionamiento = $args['estacionamiento'] ?? '';
         $this->creado = date('Y/m/d');
         $this->vendedorId = $args['vendedorId'] ?? '';
-    }
-
-    /** Definir la conexón a la BD 
-     * El método también tiene que ser estático.
-     */
-    static function setDB($database)
-    {
-        self::$db = $database;
     }
 
     public function guardar()
@@ -104,9 +104,9 @@ class Propiedad
         return $sanitizado;
     }
 
-    /** Subida de archivos */
     public function setImagen($imagen)
     {
+        //asignar nombre de la imagen
         if ($imagen) {
             $this->imagen = $imagen;
         }
@@ -148,10 +148,63 @@ class Propiedad
             self::$errores[] = 'Elige un Vendedor';
         }
 
-        if ($this->imagen) {
+        if (!$this->imagen) {
             self::$errores[] = 'La Imagen es obligatoria';
         }
 
         return self::$errores;
+    }
+
+    /** Listar toas las propiedades */
+    public static function all()
+    {
+        $query = "SELECT * FROM propiedades";
+
+        $resultado = self::consultarSQL($query);
+
+        return $resultado;
+    }
+
+    public static function consultarSQL($query)
+    {
+        /** 1- Consulatar la BD*/
+        $resultado = self::$db->query($query);
+
+        /** 2- Iterar los resultados*/
+        /* debuguear($resultado->fetch_assoc()); 1 Resultado */
+        $array = [];
+
+        while ($registro = $resultado->fetch_assoc()) {
+            $array[] = self::crearObjeto($registro);
+        }
+
+        /* debuguear($array); Un arreglo que contiene 1 objeto por cada resultado de la consulta a la BD */
+
+        /** 3- Liberar la memoria porque terminamos de hacer la consulta */
+        $resultado->free();
+
+        /** 4- Retornar los resultados */
+        return $array;
+    }
+
+    /** Básicamente va a tomar estos arreglos de la base de datos, porque así vienen como arreglos y nos va a crear unos objetos. */
+    protected static function crearObjeto($registro)
+    {
+        $objeto = new self; // Clase Padre. Nueva instancia a Propiedad dentro de nuestra clase.
+
+        /*
+        debuguear($objeto);
+        /*
+        object(App\Propiedad)#5 (10) {
+        }
+        */
+
+        foreach ($registro as $key => $value) {
+            if (property_exists($objeto, $key)) { // Coompara la LLave del nuevo objeto en memoria, con la llave del arreglo asociatico con el resultado de la consulta a la BD.
+                $objeto->$key = $value; // Asigna a la llave del objeto el valor del arreglo.
+            }
+        }
+
+        return $objeto;
     }
 }
