@@ -46,37 +46,35 @@ $resultado = mysqli_query($db, $consulta);
 /** Arreglo con mensajes de errores **/
 $errores = [];
 
-// debuguear($_SERVER);
-// debuguear($_SERVER["REQUEST_METHOD"]); /* string(3) "GET" string(4) "POST". Si visitas una URL es GET, pero cuando envías datos y especificas en el formulario que va a ser el tipo post, entonces se mandan como type post. */
-
-$titulo = $propiedad->titulo;
-$precio = $propiedad->precio;
-$descripcion = $propiedad->descripcion;
-$habitaciones = $propiedad->habitaciones;
-$wc = $propiedad->wc;
-$estacionamiento = $propiedad->estacionamiento;
-$vendedorId = $propiedad->vendedorId;
-$imagenPropiedad = $propiedad->imagen;
-
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-    // debuguear($_POST);
     /*
-    array(2) {
-    ["titulo"]=>
-    string(16) "Casa en la playa"
-    ["precio"]=>
-    string(5) "10000"
+    debuguear($_POST);
+    /*
+        array(1) {
+    ["propiedad"]=>
+    array(6) {
+        ["titulo"]=>
+        string(20) "The Witanhurst House"
+        ["precio"]=>
+        string(9) "150000.00"
+        ["descripcion"]=>
+        string(362) "In suscipit vestibulum mauris, eget venenatis urna. Sed ullamcorper faucibus felis et pharetra. Vestibulum condimentum tortor ac sodales ullamcorper. Nunc neque dolor, luctus non nibh ac, pretium ultrices leo. Curabitur sed eros augue. Suspendisse non eros ligula. Nam vitae semper enim. Vivamus pulvinar molestie tristique. Integer nec nulla hendrerit, rhoncus."
+        ["habitaciones"]=>
+        string(1) "2"
+        ["wc"]=>
+        string(1) "2"
+        ["estacionamiento"]=>
+        string(1) "2"
+    }
     }
     */
 
-    $titulo = mysqli_real_escape_string($db, $_POST['titulo']);
-    $precio = mysqli_real_escape_string($db, $_POST['precio']);
-    $descripcion = mysqli_real_escape_string($db, $_POST['descripcion']);
-    $habitaciones = mysqli_real_escape_string($db, $_POST['habitaciones']);
-    $wc = mysqli_real_escape_string($db, $_POST['wc']);
-    $estacionamiento = mysqli_real_escape_string($db, $_POST['estacionamiento']);
-    $vendedorId = mysqli_real_escape_string($db, $_POST['vendedor']);
-    $creado = date('Y/m/d');
+    /** Asignar los atributos */
+    $args = $_POST['propiedad'];
+
+    $propiedad->sincronizar($args);
+
+    debuguear($propiedad);
 
     /** Asignar $_FILES hacia una variable */
     $imagen = $_FILES['imagen'];

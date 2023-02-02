@@ -25,16 +25,56 @@ $errores = Propiedad::getErrores();
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
     /** Crear Objeto con la instancia a la Clase */
-    $propiedad = new Propiedad($_POST);
+    $propiedad = new Propiedad($_POST['propiedad']);
+
+    /*
+    debuguear($_FILES);
+    /*
+        array(1) {
+    ["propiedad"]=>
+    array(6) {
+        ["name"]=>
+        array(1) {
+        ["imagen"]=>
+        string(12) "anuncio1.jpg"
+        }
+        ["full_path"]=>
+        array(1) {
+        ["imagen"]=>
+        string(12) "anuncio1.jpg"
+        }
+        ["type"]=>
+        array(1) {
+        ["imagen"]=>
+        string(10) "image/jpeg"
+        }
+        ["tmp_name"]=>
+        array(1) {
+        ["imagen"]=>
+        string(45) "C:\Users\kevin\AppData\Local\Temp\phpE48C.tmp"
+        }
+        ["error"]=>
+        array(1) {
+        ["imagen"]=>
+        int(0)
+        }
+        ["size"]=>
+        array(1) {
+        ["imagen"]=>
+        int(94804)
+        }
+    }
+    }
+    */
 
     /** Subida de archivos **/
     /** 2- Generar un nombre único */
     $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
 
-    if ($_FILES['imagen']['tmp_name']) {
+    if ($_FILES['propiedad']['tmp_name']['imagen']) {
         /** Setear la imagen */
         /** Realiza un resize a la imagen con Intervention */
-        $image = Image::make($_FILES['imagen']['tmp_name'])->fit(800, 600);
+        $image = Image::make($_FILES['propiedad']['tmp_name']['imagen'])->fit(800, 600);
         $propiedad->setImagen($nombreImagen);
     }
 
