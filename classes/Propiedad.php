@@ -9,7 +9,7 @@ class Propiedad
      */
     protected static $db;
 
-    protected static $columnasDB = ['id', 'titulo', 'imagen', 'descripcion', 'habitaciones', 'wc', 'estacionamiento', 'creado', 'vendedorId'];
+    protected static $columnasDB = ['id', 'titulo', 'precio', 'imagen', 'descripcion', 'habitaciones', 'wc', 'estacionamiento', 'creado', 'vendedorId'];
 
     /** Errores */
     protected static $errores = [];
@@ -38,7 +38,7 @@ class Propiedad
 
         $this->id = $args['id'] ?? '';
         $this->titulo = $args['titulo'] ?? '';
-        $this->precio = $args['precio'] ?? '';
+        $this->precio = intval($args['precio']) ?? '';
         $this->imagen = $args['imagen'] ?? '';
         $this->descripcion = $args['descripcion'] ?? '';
         $this->habitaciones = $args['habitaciones'] ?? '';
@@ -163,6 +163,16 @@ class Propiedad
         $resultado = self::consultarSQL($query);
 
         return $resultado;
+    }
+
+    /** Buscar una propiedad por su ID */
+    public static function find($id)
+    {
+        $query = "SELECT * FROM propiedades WHERE id = {$id}";
+
+        $resultado = self::consultarSQL($query);
+
+        return array_shift($resultado); // array_shift - Retorna la primer posición de un arreglo.
     }
 
     public static function consultarSQL($query)

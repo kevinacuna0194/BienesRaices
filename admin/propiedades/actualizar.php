@@ -1,29 +1,43 @@
 <?php
-require '../../includes/funciones.php';
-$auth = estaAutenticado();
+require '../../includes/app.php';
 
-if (!$auth) {
-    header('location: /');
-}
+/** Importar Clase */
+
+use App\Propiedad;
+
+estaAutenticado();
 
 $id = $_GET['id'];
-//Reescribir variable
-$id = filter_var($id, FILTER_VALIDATE_INT);
+$id = filter_var($id, FILTER_VALIDATE_INT); //Reescribir variable
 
-// var_dump($id); /** int(4) / bool(false)*/
+$propiedad = Propiedad::find($id);
 
-if (!$id) {
-    header('location: /admin');
+/*
+debuguear($propiedad);
+/*
+object(App\Propiedad)#5 (10) {
+  ["id"]=>
+  string(1) "5"
+  ["titulo"]=>
+  string(20) "The Witanhurst House"
+  ["precio"]=>
+  string(9) "150000.00"
+  ["imagen"]=>
+  string(36) "63e632e839c7f2cca3c9e68b1a606597.jpg"
+  ["descripcion"]=>
+  string(362) "In suscipit vestibulum mauris, eget venenatis urna. Sed ullamcorper faucibus felis et pharetra. Vestibulum condimentum tortor ac sodales ullamcorper. Nunc neque dolor, luctus non nibh ac, pretium ultrices leo. Curabitur sed eros augue. Suspendisse non eros ligula. Nam vitae semper enim. Vivamus pulvinar molestie tristique. Integer nec nulla hendrerit, rhoncus."
+  ["habitaciones"]=>
+  string(1) "2"
+  ["wc"]=>
+  string(1) "2"
+  ["estacionamiento"]=>
+  string(1) "2"
+  ["creado"]=>
+  string(10) "2023-01-26"
+  ["vendedorId"]=>
+  string(1) "1"
 }
-
-/** Conectarse a la BD */
-require '../../includes/config/database.php';
-$db = conectarDB();
-
-$consulta = "SELECT * FROM propiedades WHERE id = $id";
-$resultado = mysqli_query($db, $consulta);
-/** Como es solo un resultado no necesitamos while() */
-$propiedad = mysqli_fetch_assoc($resultado);
+*/
 
 /** Consultar para obtener los vendedores **/
 $consulta = "SELECT * FROM vendedores";
@@ -35,14 +49,14 @@ $errores = [];
 // debuguear($_SERVER);
 // debuguear($_SERVER["REQUEST_METHOD"]); /* string(3) "GET" string(4) "POST". Si visitas una URL es GET, pero cuando envías datos y especificas en el formulario que va a ser el tipo post, entonces se mandan como type post. */
 
-$titulo = $propiedad['titulo'];
-$precio = $propiedad['precio'];
-$descripcion = $propiedad['descripcion'];
-$habitaciones = $propiedad['habitaciones'];
-$wc = $propiedad['wc'];
-$estacionamiento = $propiedad['estacionamiento'];
-$vendedorId = $propiedad['vendedorId'];
-$imagenPropiedad = $propiedad['imagen'];
+$titulo = $propiedad->titulo;
+$precio = $propiedad->precio;
+$descripcion = $propiedad->descripcion;
+$habitaciones = $propiedad->habitaciones;
+$wc = $propiedad->wc;
+$estacionamiento = $propiedad->estacionamiento;
+$vendedorId = $propiedad->vendedorId;
+$imagenPropiedad = $propiedad->imagen;
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     // debuguear($_POST);
@@ -194,47 +208,8 @@ incluirTemplate('header');
     <?php endforeach; ?>
 
     <form class="formulario" method="POST" action="" enctype="multipart/form-data">
-        <fieldset>
-            <legend>Información General</legend>
 
-            <label for="titulo">Título:</label>
-            <input type="text" id="titulo" name="titulo" placeholder="Título Propiedad" value="<?php echo $titulo ?>">
-
-            <label for=" precio">Precio:</label>
-            <input type="number" id="precio" name="precio" placeholder="Precio Propiedad" value="<?php echo $precio ?>">
-
-            <label for=" imagen">Imagen:</label>
-            <input type="file" id="imagen" accept="image/jpeg, image/png" name="imagen">
-
-            <img src="/imagenes/<?php echo $imagenPropiedad; ?>" class="imagen-small">
-
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion"><?php echo $descripcion ?></textarea>
-        </fieldset>
-
-        <fielset>
-            <legend>Información Propiedad</legend>
-
-            <label for="habitaciones">Habitaciones:</label>
-            <input type="number" id="habitaciones" name="habitaciones" placeholder="Ej: 3" min="1" max="9" value="<?php echo $habitaciones ?>"> <!-- step="2 -->
-
-            <label for="wc">Baño:</label>
-            <input type="number" id="wc" name="wc" placeholder="Ej: 3" min="1" max="9" value="<?php echo $wc ?>">
-
-            <label for="estacionamiento">Estacionamiento</label>
-            <input type="number" id="estacionamiento" name="estacionamiento" placeholder="Ej: 3" min="1" max="9" value="<?php echo $estacionamiento ?>">
-        </fielset>
-
-        <fieldset>
-            <legend>Vendedor</legend>
-
-            <select name="vendedor">
-                <option value="">-- Seleccione --</option>
-                <?php while ($vendedor = mysqli_fetch_assoc($resultado)) : ?>
-                    <option <?php echo $vendedorId === $vendedor['id'] ? 'selected' : ''; ?> value="<?php echo $vendedor['id']; ?>"><?php echo $vendedor['nombre'] . " " . $vendedor['apellido']; ?></option>
-                <?php endwhile ?>
-            </select>
-        </fieldset>
+        <?php include '../../includes/templates/formulario_propiedades.php'; ?>
 
         <input type="submit" value="Actualizar Propiedad" class="boton boton-verde">
     </form>
