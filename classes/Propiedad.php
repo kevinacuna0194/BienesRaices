@@ -38,7 +38,7 @@ class Propiedad
 
         $this->id = $args['id'] ?? '';
         $this->titulo = $args['titulo'] ?? '';
-        $this->precio = intval($args['precio']) ?? '';
+        $this->precio = $args['precio'] ?? '';
         $this->imagen = $args['imagen'] ?? '';
         $this->descripcion = $args['descripcion'] ?? '';
         $this->habitaciones = $args['habitaciones'] ?? '';

@@ -44,7 +44,7 @@ $consulta = "SELECT * FROM vendedores";
 $resultado = mysqli_query($db, $consulta);
 
 /** Arreglo con mensajes de errores **/
-$errores = [];
+$errores = Propiedad::getErrores();
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     /*
@@ -74,67 +74,10 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
     $propiedad->sincronizar($args);
 
-    debuguear($propiedad);
+    $errores = $propiedad->validar();
 
     /** Asignar $_FILES hacia una variable */
     $imagen = $_FILES['imagen'];
-
-    // debuguear($imagen);
-    /*
-    array(6) {
-    ["name"]=>
-    string(12) "anuncio1.jpg"
-    ["full_path"]=>
-    string(12) "anuncio1.jpg"
-    ["type"]=>
-    string(10) "image/jpeg"
-    ["tmp_name"]=>
-    string(45) "C:\Users\kevin\AppData\Local\Temp\php3016.tmp"
-    ["error"]=>
-    int(0)
-    ["size"]=>
-    int(94804)
-    }
-    */
-
-    if (!$titulo) {
-        $errores[] = 'Debes añadir un Título';
-    }
-
-    if (!$precio) {
-        $errores[] = 'El Precio es obligatorio';
-    }
-
-    if (strlen($descripcion) < 50) {
-        $errores[] = 'La Descripcion es obligatoria y debe tener al menos 50 caracteres';
-    }
-
-    if (!$habitaciones) {
-        $errores[] = 'El número de Habitaciones es obligatoria';
-    }
-
-    if (!$wc) {
-        $errores[] = 'El número de Baños es obligatorio';
-    }
-
-    if (!$estacionamiento) {
-        $errores[] = 'El número de lugares de Estacionamiento es obligatorio';
-    }
-
-    if (!$vendedorId) {
-        $errores[] = 'Elige un Vendedor';
-    }
-
-    /** No es obligatorio subir una nueva imagen en actualizar **/
-    /* if (!$imagen['name'] || $imagen['error']) { // 2mb por default en php. retorna size 0 y errror 1.
-        $errores[] = 'La imagen es obligatoria';
-    } */
-
-    /** Validar por tamaño (1 MB máximo ~ 1000 KB ~ 100.000.000 bytes) */
-    $medida = 1000 * 1000;
-    if ($imagen['size'] > $medida) {
-        $errores[] = 'La imagen es muy pesada';
-    }
 
     /** revisar que el Arrat de errores este vacio **/
     if (empty($errores)) {
