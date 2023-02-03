@@ -91,19 +91,10 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
     /** revisar que el Arrat de errores este vacio **/
     if (empty($errores)) {
+        /** Alacenar imagen */
+        $image->save(CARPETA_IMAGENES . $nombreImagen);
 
-
-        exit;
-
-        /** Insertan en la BD */
-        $query = " UPDATE propiedades SET titulo = '$titulo', precio = '$precio', imagen = '$nombreImagen', descripcion = '$descripcion', habitaciones = $habitaciones, wc = $wc, estacionamiento = $estacionamiento, creado = '$creado', vendedorId = $vendedorId WHERE id = $id";
-
-        $resultado = mysqli_query($db, $query);
-
-        if ($resultado) {
-            /** Redireccionar al usuario */
-            header('location: /admin?resultado=2');
-        }
+        $propiedad->guardar();
     }
 }
 

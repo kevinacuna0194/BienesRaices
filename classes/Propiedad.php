@@ -50,6 +50,17 @@ class Propiedad
 
     public function guardar()
     {
+        if (isset($this->id)) {
+            /** Actualizar */
+            $this->actualizar();
+        } else {
+            /** Crear un nuevo registro */
+            $this->crear();
+        }
+    }
+
+    public function crear()
+    {
         /** Arreglo de Atributos ya Sanitizados */
         $atributos = $this->sanitizarAtributos();
 
@@ -75,6 +86,66 @@ class Propiedad
         $resultado = self::$db->query($query);
 
         return $resultado; // true or false
+    }
+
+    public function actualizar()
+    {
+        /** Arreglo de Atributos ya Sanitizados */
+        $atributos = $this->sanitizarAtributos();
+
+        $valores = [];
+        foreach ($atributos as $key => $value) {
+            $valores[] = "$key = '$value'";
+        }
+
+        /*
+        debuguear($valores);
+        /*
+        array(9) {
+        [0]=>
+        string(31) "titulo = 'The Witanhurst House'"
+        [1]=>
+        string(20) "precio = '150000.00'"
+        [2]=>
+        string(47) "imagen = '63e632e839c7f2cca3c9e68b1a606597.jpg'"
+        [3]=>
+        string(378) "descripcion = 'In suscipit vestibulum mauris, eget venenatis urna. Sed ullamcorper faucibus felis et pharetra. Vestibulum condimentum tortor ac sodales ullamcorper. Nunc neque dolor, luctus non nibh ac, pretium ultrices leo. Curabitur sed eros augue. Suspendisse non eros ligula. Nam vitae semper enim. Vivamus pulvinar molestie tristique. Integer nec nulla hendrerit, rhoncus.'"
+        [4]=>
+        string(18) "habitaciones = '2'"
+        [5]=>
+        string(8) "wc = '2'"
+        [6]=>
+        string(21) "estacionamiento = '2'"
+        [7]=>
+        string(21) "creado = '2023-01-26'"
+        [8]=>
+        string(16) "vendedorId = '1'"
+        }
+        */
+
+        /*
+        debuguear(join(', ', $valores));
+        /*
+        string(576) "titulo = 'The Witanhurst House', precio = '150000.00', imagen = '63e632e839c7f2cca3c9e68b1a606597.jpg', descripcion = 'In suscipit vestibulum mauris, eget venenatis urna. Sed ullamcorper faucibus felis et pharetra. Vestibulum condimentum tortor ac sodales ullamcorper. Nunc neque dolor, luctus non nibh ac, pretium ultrices leo. Curabitur sed eros augue. Suspendisse non eros ligula. Nam vitae semper enim. Vivamus pulvinar molestie tristique. Integer nec nulla hendrerit, rhoncus.', habitaciones = '2', wc = '2', estacionamiento = '2', creado = '2023-01-26', vendedorId = '1'"
+        */
+
+        $query = "UPDATE propiedades SET ";
+        $query .= join(', ', $valores);
+        $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "'";
+        $query .= " LIMIT 1";
+
+        /*
+        debuguear($query);
+        /*
+        string(622) "UPDATE propiedades SET titulo = 'The Witanhurst House', precio = '150000.00', imagen = '63e632e839c7f2cca3c9e68b1a606597.jpg', descripcion = 'In suscipit vestibulum mauris, eget venenatis urna. Sed ullamcorper faucibus felis et pharetra. Vestibulum condimentum tortor ac sodales ullamcorper. Nunc neque dolor, luctus non nibh ac, pretium ultrices leo. Curabitur sed eros augue. Suspendisse non eros ligula. Nam vitae semper enim. Vivamus pulvinar molestie tristique. Integer nec nulla hendrerit, rhoncus.', habitaciones = '2', wc = '2', estacionamiento = '2', creado = '2023-01-26', vendedorId = '1' WHERE id = '5' LIMIT 1"
+        */
+
+        $resultado = self::$db->query($query);
+
+        if ($resultado) {
+            /** Redireccionar al usuario */
+            header('location: /admin?resultado=2');
+        }
     }
 
     /** Itera sobre $columnasDB 
@@ -109,7 +180,7 @@ class Propiedad
         /** Elimina la imagen previa 
          * if ($this->id) significa que estoy editando.
          */
-        if ($this->id) {
+        if (isset($this->id)) {
             /** Comprobar si existe el archivo */
             $exiteArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
 
