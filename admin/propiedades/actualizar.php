@@ -1,9 +1,11 @@
 <?php
-require '../../includes/app.php';
 
 /** Importar Clase */
 
 use App\Propiedad;
+use Intervention\Image\ImageManagerStatic as Image;
+
+require '../../includes/app.php';
 
 estaAutenticado();
 
@@ -71,56 +73,27 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
     /** Asignar los atributos */
     $args = $_POST['propiedad'];
-
     $propiedad->sincronizar($args);
 
+    /** Vlidar formulario */
     $errores = $propiedad->validar();
 
-    /** Asignar $_FILES hacia una variable */
-    $imagen = $_FILES['imagen'];
+    /** Subida de archivos */
+    /** Generar un nombre único */
+    $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+
+    if ($_FILES['propiedad']['tmp_name']['imagen']) {
+        /** Setear la imagen */
+        /** Realiza un resize a la imagen con Intervention */
+        $image = Image::make($_FILES['propiedad']['tmp_name']['imagen'])->fit(800, 600);
+        $propiedad->setImagen($nombreImagen);
+    }
 
     /** revisar que el Arrat de errores este vacio **/
     if (empty($errores)) {
 
-        /*** Subida de archivos ***/
-        /** 1- Crear carpeta */
-        /* debuguear($imagen); 
-        *array(6) {
-        ["name"]=>
-        string(12) "anuncio1.jpg"
-        ["full_path"]=>
-        string(12) "anuncio1.jpg"
-        ["type"]=>
-        string(10) "image/jpeg"
-        ["tmp_name"]=>
-        string(45) "C:\Users\kevin\AppData\Local\Temp\phpFD4D.tmp"
-        ["error"]=>
-        int(0)
-        ["size"]=>
-        int(94804)
-        } - si esxiste es porque se subio una nueva imagen */
 
-        /** Crear carpeta */
-        $carpetaImagenes = '../../imagenes/';
-
-        if (!is_dir($carpetaImagenes)) {
-            mkdir($carpetaImagenes);
-        }
-
-        $nombreImagen = '';
-
-        if ($imagen['name']) { // En caso de que subamos una nueva imagen.
-            /* Eliminar imagen previa */
-            unlink($carpetaImagenes . $propiedad['imagen']);
-
-            /** Generar un nombre único */
-            $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
-
-            /** Subir la imagen */
-            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
-        } else {
-            $nombreImagen = $propiedad['imagen'];
-        }
+        exit;
 
         /** Insertan en la BD */
         $query = " UPDATE propiedades SET titulo = '$titulo', precio = '$precio', imagen = '$nombreImagen', descripcion = '$descripcion', habitaciones = $habitaciones, wc = $wc, estacionamiento = $estacionamiento, creado = '$creado', vendedorId = $vendedorId WHERE id = $id";

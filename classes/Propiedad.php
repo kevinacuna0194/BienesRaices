@@ -106,6 +106,18 @@ class Propiedad
 
     public function setImagen($imagen)
     {
+        /** Elimina la imagen previa 
+         * if ($this->id) significa que estoy editando.
+         */
+        if ($this->id) {
+            /** Comprobar si existe el archivo */
+            $exiteArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
+
+            if ($exiteArchivo) {
+                unlink(CARPETA_IMAGENES . $this->imagen);
+            }
+        }
+
         //asignar nombre de la imagen
         if ($imagen) {
             $this->imagen = $imagen;
