@@ -92,13 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $image->save(CARPETA_IMAGENES . $nombreImagen);
 
         /** Guardar en la BD */
-        $resultado = $propiedad->guardar();
-
-        /** Mensaje de éxito o error */
-        if ($resultado) {
-            /** Redireccionar al usuario */
-            header('location: /admin?resultado=1');
-        }
+        $propiedad->guardar();
     }
 }
 

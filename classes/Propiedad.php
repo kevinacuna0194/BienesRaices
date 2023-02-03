@@ -36,7 +36,7 @@ class Propiedad
     public function __construct($args = [])
     {
 
-        $this->id = $args['id'] ?? '';
+        $this->id = $args['id'] ?? null;
         $this->titulo = $args['titulo'] ?? '';
         $this->precio = $args['precio'] ?? '';
         $this->imagen = $args['imagen'] ?? '';
@@ -50,7 +50,7 @@ class Propiedad
 
     public function guardar()
     {
-        if (isset($this->id)) {
+        if (!is_null($this->id)) {
             /** Actualizar */
             $this->actualizar();
         } else {
@@ -85,7 +85,11 @@ class Propiedad
 
         $resultado = self::$db->query($query);
 
-        return $resultado; // true or false
+        /** Mensaje de éxito o error */
+        if ($resultado) {
+            /** Redireccionar al usuario */
+            header('location: /admin?resultado=1');
+        }
     }
 
     public function actualizar()
@@ -148,6 +152,25 @@ class Propiedad
         }
     }
 
+    /** Eliminar un registro */
+    public function eliminar()
+    {
+        /** Elimina la propiedad */
+        $query = "DELETE FROM propiedades WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
+
+        /*
+        debuguear($query);
+        /** string(45) "DELETE FROM propiedades WHERE id = 34 LIMIT 1" */
+
+        $resultado = self::$db->query($query);
+
+        if ($resultado) {
+            $this->borrarImagen();
+
+            header('location: /admin?resultado=3');
+        }
+    }
+
     /** Itera sobre $columnasDB 
      * Identificar y unir los atributos de la BD
      */
@@ -175,23 +198,31 @@ class Propiedad
         return $sanitizado;
     }
 
+    /** Subida de archivos */
     public function setImagen($imagen)
     {
         /** Elimina la imagen previa 
          * if ($this->id) significa que estoy editando.
          */
-        if (isset($this->id)) {
-            /** Comprobar si existe el archivo */
-            $exiteArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
-
-            if ($exiteArchivo) {
-                unlink(CARPETA_IMAGENES . $this->imagen);
-            }
+        if (!is_null($this->id)) {
+            $this->borrarImagen();
         }
 
         //asignar nombre de la imagen
         if ($imagen) {
             $this->imagen = $imagen;
+        }
+    }
+
+    /** Eliminar archivo */
+    public function borrarImagen()
+    {
+        // debuguear($this);
+
+        /** Comprobar si existe el archivo */
+        $exiteArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
+        if ($exiteArchivo) {
+            unlink(CARPETA_IMAGENES . $this->imagen);
         }
     }
 

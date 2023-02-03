@@ -25,24 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = filter_var($id, FILTER_VALIDATE_INT);
 
     if ($id) {
-        /** Ya tenemos una conexión a la BD */
+        $propiedad = Propiedad::find($id);
 
-        /** Eliminar el archivo */
-        $query = "SELECT imagen FROM propiedades WHERE id = $id";
-        $resultado = mysqli_query($db, $query);
-        $propiedad = mysqli_fetch_assoc($resultado);
-
-        /* var_dump($imagen); array(1) { ["imagen"]=> string(36) "7dece554ecfe0d3a85074622e9db1ecf.jpg" } */
-        unlink('../imagenes/' . $propiedad['imagen']);
-
-        /** Elimina la propiedad */
-        $query = "DELETE FROM propiedades WHERE id = $id";
-
-        $resultado = mysqli_query($db, $query);
-
-        if ($resultado) {
-            header('location: /admin?resultado=3');
-        }
+        $propiedad->eliminar();
     }
 }
 
