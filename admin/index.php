@@ -4,11 +4,12 @@ include '../includes/app.php';
 estaAutenticado();
 
 /** Importar Clase */
-
 use App\Propiedad;
+use App\Vendedor;
 
 /** Implementar un Método para obtener las Propiedades */
 $propiedades = Propiedad::all();
+$vendedores = Vendedor::all();
 
 /** Mostrar mensaje condicional */
 $resultado = $_GET['resultado'] ?? null; // isset($_GET['resultado'])

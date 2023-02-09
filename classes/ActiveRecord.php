@@ -11,6 +11,8 @@ class ActiveRecord
 
     protected static $columnasDB = ['id', 'titulo', 'precio', 'imagen', 'descripcion', 'habitaciones', 'wc', 'estacionamiento', 'creado', 'vendedorId'];
 
+    protected static $tabla = '';
+
     /** Errores */
     protected static $errores = [];
 
@@ -74,7 +76,7 @@ class ActiveRecord
         /** string(475) "Neverland, imagen.jpg, \r\nVivamus at lectus sit amet nunc viverra viverra. Nunc libero magna, bibendum vitae erat nec, venenatis pharetra felis. Proin nunc diam, consectetur at tellus id, porta suscipit lacus. Aenean eu velit libero. Etiam at pharetra lacus. Praesent a lectus sit amet orci consectetur fermentum. Pellentesque commodo auctor ultrices. Maecenas urna purus, ullamcorper vel turpis tempor, lobortis feugiat nisl. Pellentesque porttitor., 1, 1, 1, 2023/01/29, 2" */
 
         /** Insertan en la BD */
-        $query = "INSERT INTO propiedades (";
+        $query = "INSERT INTO " . static::$tabla . " (";
         $query .= join(', ', array_keys($atributos));
         $query .= ") VALUES ('";
         $query .= join("', '", array_values($atributos));
@@ -133,7 +135,7 @@ class ActiveRecord
         string(576) "titulo = 'The Witanhurst House', precio = '150000.00', imagen = '63e632e839c7f2cca3c9e68b1a606597.jpg', descripcion = 'In suscipit vestibulum mauris, eget venenatis urna. Sed ullamcorper faucibus felis et pharetra. Vestibulum condimentum tortor ac sodales ullamcorper. Nunc neque dolor, luctus non nibh ac, pretium ultrices leo. Curabitur sed eros augue. Suspendisse non eros ligula. Nam vitae semper enim. Vivamus pulvinar molestie tristique. Integer nec nulla hendrerit, rhoncus.', habitaciones = '2', wc = '2', estacionamiento = '2', creado = '2023-01-26', vendedorId = '1'"
         */
 
-        $query = "UPDATE propiedades SET ";
+        $query = "UPDATE " . static::$tabla . " SET ";
         $query .= join(', ', $valores);
         $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "'";
         $query .= " LIMIT 1";
@@ -155,8 +157,7 @@ class ActiveRecord
     /** Eliminar un registro */
     public function eliminar()
     {
-        /** Elimina la propiedad */
-        $query = "DELETE FROM propiedades WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
+        $query = "DELETE FROM " . static::$tabla . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
 
         /*
         debuguear($query);
@@ -272,7 +273,7 @@ class ActiveRecord
     /** Listar toas las propiedades */
     public static function all()
     {
-        $query = "SELECT * FROM propiedades";
+        $query = "SELECT * FROM " . static::$tabla;
 
         $resultado = self::consultarSQL($query);
 
@@ -282,7 +283,7 @@ class ActiveRecord
     /** Buscar una propiedad por su ID */
     public static function find($id)
     {
-        $query = "SELECT * FROM propiedades WHERE id = {$id}";
+        $query = "SELECT * FROM " . static::$tabla . " WHERE id = {$id}";
 
         $resultado = self::consultarSQL($query);
 
