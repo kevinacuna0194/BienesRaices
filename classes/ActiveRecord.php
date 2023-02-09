@@ -9,23 +9,11 @@ class ActiveRecord
      */
     protected static $db;
 
-    protected static $columnasDB = ['id', 'titulo', 'precio', 'imagen', 'descripcion', 'habitaciones', 'wc', 'estacionamiento', 'creado', 'vendedorId'];
-
+    /** Estos atribustos existen pero a la hora de heredarlos se reescriben */
+    protected static $columnasDB = [];
     protected static $tabla = '';
-
     /** Errores */
     protected static $errores = [];
-
-    public $id;
-    public $titulo;
-    public $precio;
-    public $imagen;
-    public $descripcion;
-    public $habitaciones;
-    public $wc;
-    public $estacionamiento;
-    public $creado;
-    public $vendedorId;
 
     /** Definir la conexón a la BD 
      * El método también tiene que ser estático.
@@ -33,21 +21,6 @@ class ActiveRecord
     static function setDB($database)
     {
         self::$db = $database;
-    }
-
-    public function __construct($args = [])
-    {
-
-        $this->id = $args['id'] ?? null;
-        $this->titulo = $args['titulo'] ?? '';
-        $this->precio = $args['precio'] ?? '';
-        $this->imagen = $args['imagen'] ?? '';
-        $this->descripcion = $args['descripcion'] ?? '';
-        $this->habitaciones = $args['habitaciones'] ?? '';
-        $this->wc = $args['wc'] ?? '';
-        $this->estacionamiento = $args['estacionamiento'] ?? '';
-        $this->creado = date('Y/m/d');
-        $this->vendedorId = $args['vendedorId'] ?? 1;
     }
 
     public function guardar()
@@ -315,7 +288,7 @@ class ActiveRecord
     /** Básicamente va a tomar estos arreglos de la base de datos, porque así vienen como arreglos y nos va a crear unos objetos. */
     protected static function crearObjeto($registro)
     {
-        $objeto = new self; // Clase Padre. Nueva instancia a Propiedad dentro de nuestra clase.
+        $objeto = new static; // Clase Padre. Nueva instancia a Propiedad dentro de nuestra clase.
 
         /*
         debuguear($objeto);
