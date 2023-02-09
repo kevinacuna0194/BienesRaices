@@ -22,3 +22,6 @@ class Vendedor extends ActiveRecord
         $this->telefono = $args['telefono'] ?? '';
     }
 }
+
+
+

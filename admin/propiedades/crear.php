@@ -3,20 +3,17 @@
 require '../../includes/app.php';
 
 use App\Propiedad;
+use App\Vendedor;
 /* import the Intervention Image Manager Class */
 use Intervention\Image\ImageManagerStatic as Image;
 
 estaAutenticado();
 
-/** BD */
-$db = conectarDB();
-
 /** Instanciar clase */
 $propiedad = new Propiedad;
 
-/** Consultar para obtener los vendedores **/
-$consulta = "SELECT * FROM vendedores";
-$resultado = mysqli_query($db, $consulta);
+/** Consulta para obtener todos los Vendedores */
+$vendedores = Vendedor::all();
 
 /** Arreglo con mensajes de errores 
  * Para que no marque undefined **/
