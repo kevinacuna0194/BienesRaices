@@ -5,11 +5,15 @@
         color: $blanco;
     }
 
-    a, h1,h2,h3,h4  {
+    a,
+    h1,
+    h2,
+    h3,
+    h4 {
         color: $gris;
     }
 
-    .anuncio, 
+    .anuncio,
     .resumen-propiedad {
         background-color: $grisOscuro;
         border: 1px solid $grisOscuro;
@@ -17,24 +21,31 @@
         .precio {
             color: $verde;
         }
+
         .icono {
             filter: invert(100%);
         }
     }
-    
+
 
     .texto-nosotros blockquote {
         color: $blanco;
     }
-   
+
     .formulario {
+
         label,
         legend,
         p {
             color: $gris;
         }
 
-        input:not([type="submit"]), 
+        td,
+        tr {
+            color: $blanco;
+        }
+
+        input:not([type="submit"]),
         textarea,
         select {
             background-color: $grisOscuro;
@@ -43,5 +54,7 @@
         }
     }
 
-  
+    table tbody tr {
+        color: $blanco;
+    }
 }
