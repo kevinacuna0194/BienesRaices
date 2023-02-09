@@ -151,7 +151,7 @@ class ActiveRecord
     public function atributos(): array
     {
         $atributos = [];
-        foreach (self::$columnasDB as $columna) {
+        foreach (static::$columnasDB as $columna) {
             if ($columna === 'id') continue;
             $atributos[$columna] = $this->$columna;
         }
@@ -242,7 +242,7 @@ class ActiveRecord
         $array = [];
 
         while ($registro = $resultado->fetch_assoc()) {
-            $array[] = self::crearObjeto($registro);
+            $array[] = static::crearObjeto($registro);
         }
 
         /* debuguear($array); Un arreglo que contiene 1 objeto por cada resultado de la consulta a la BD */

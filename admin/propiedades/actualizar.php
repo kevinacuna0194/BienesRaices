@@ -3,6 +3,7 @@
 /** Importar Clase */
 
 use App\Propiedad;
+use App\Vendedor;
 use Intervention\Image\ImageManagerStatic as Image;
 
 require '../../includes/app.php';
@@ -12,11 +13,11 @@ estaAutenticado();
 $id = $_GET['id'];
 $id = filter_var($id, FILTER_VALIDATE_INT); //Reescribir variable
 
+/** Obtener los datos de la propiedad */
 $propiedad = Propiedad::find($id);
 
 /*
 debuguear($propiedad);
-/*
 object(App\Propiedad)#5 (10) {
   ["id"]=>
   string(1) "5"
@@ -42,8 +43,7 @@ object(App\Propiedad)#5 (10) {
 */
 
 /** Consultar para obtener los vendedores **/
-$consulta = "SELECT * FROM vendedores";
-$resultado = mysqli_query($db, $consulta);
+$vendedores = Vendedor::all();
 
 /** Arreglo con mensajes de errores **/
 $errores = Propiedad::getErrores();
@@ -89,10 +89,12 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $propiedad->setImagen($nombreImagen);
     }
 
-    /** revisar que el Arrat de errores este vacio **/
+    /** revisar que el Arreglo de errores, este vacio **/
     if (empty($errores)) {
-        /** Alacenar imagen */
-        $image->save(CARPETA_IMAGENES . $nombreImagen);
+        /** Si hay una imagen almacenarla */
+        if ($_FILES['propiedad']['tmp_name']['imagen']) {
+            $image->save(CARPETA_IMAGENES . $nombreImagen);
+        }
 
         $propiedad->guardar();
     }
