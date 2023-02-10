@@ -78,6 +78,7 @@ incluirTemplate('header');
     <?php endif; ?>
 
     <a href="/admin/propiedades/crear.php" class="botom boton-verde">Nueva Propiedad</a>
+    <a href="/admin/vendedores/crear.php" class="botom boton-amarillo">Nuevo(a) Vendedor</a>
 
     <h2>Propiedades</h2>
 
@@ -106,7 +107,7 @@ incluirTemplate('header');
                             <input type="submit" class="boton-rojo-block" value="Eliminar">
                         </form>
 
-                        <a href="admin/propiedades/actualizar.php?id=<?php echo $propiedad->id; ?>" class="boton-amarillo-block">Actualizar</a>
+                        <a href="admin/vendedores/actualizar.php?id=<?php echo $vendedor->id; ?>" class="boton-amarillo-block">Actualizar</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
