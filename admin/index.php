@@ -23,13 +23,41 @@ $resultado = $_GET['resultado'] ?? null; // isset($_GET['resultado'])
     } 
  */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    /*
+    debuguear($_POST);
+    /*
+    array(2) {
+    ["id"]=>
+    string(2) "36"
+    ["tipo"]=>
+    string(9) "propiedad"
+    }
+
+    array(2) {
+    ["id"]=>
+    string(1) "2"
+    ["tipo"]=>
+    string(8) "vendedor"
+    }
+    */
+
     $id = $_POST['id'];
     $id = filter_var($id, FILTER_VALIDATE_INT);
 
     if ($id) {
-        $propiedad = Propiedad::find($id);
 
-        $propiedad->eliminar();
+        $tipo = $_POST['tipo'];
+
+        if (validarTipoContenido($tipo)) {
+            /** Compara lo que vamos a eliminar */
+            if ($tipo === 'vendedor') {
+                $vendedor = Vendedor::find($id);
+                $vendedor->eliminar();
+            } else if ($tipo === 'propiedad') {
+                $propiedad = Propiedad::find($id);
+                $propiedad->eliminar();
+            }
+        }
     }
 }
 
@@ -74,6 +102,7 @@ incluirTemplate('header');
                     <td>
                         <form method="POST" class="w-100">
                             <input type="hidden" name="id" value="<?php echo $propiedad->id; ?>">
+                            <input type="hidden" name="tipo" value="propiedad">
                             <input type="submit" class="boton-rojo-block" value="Eliminar">
                         </form>
 
@@ -105,6 +134,7 @@ incluirTemplate('header');
                     <td>
                         <form method="POST" class="w-100">
                             <input type="hidden" name="id" value="<?php echo $vendedor->id; ?>">
+                            <input type="hidden" name="tipo" value="vendedor">
                             <input type="submit" class="boton-rojo-block" value="Eliminar">
                         </form>
 

@@ -34,3 +34,10 @@ function s($html) : string
     $s = htmlspecialchars($html);
     return $s;
 }
+
+/** Validar tipo de contenido */
+function validarTipoContenido($tipo) {
+    $tipos = ['vendedor', 'propiedad'];
+
+    return in_array($tipo, $tipos); /** buscar un string dentro de un arreglo o un valor dentro de un arreglo. Toma dos valores, lo que vamos a buscar y el segundo es el arreglo donde lo va a buscar. */
+}
