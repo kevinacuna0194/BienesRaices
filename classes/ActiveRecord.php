@@ -222,6 +222,16 @@ class ActiveRecord
         return $resultado;
     }
 
+    /** Obtener determinado número de registros */
+    public static function get($cantidad)
+    {
+        $query = "SELECT * FROM " . static::$tabla . " LIMIT " . $cantidad;
+
+        $resultado = self::consultarSQL($query);
+
+        return $resultado;
+    }
+
     /** Buscar una propiedad por su ID */
     public static function find($id)
     {
