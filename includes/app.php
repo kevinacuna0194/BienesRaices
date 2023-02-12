@@ -9,7 +9,7 @@ require __DIR__ . '/../vendor/autoload.php';
  */
 $db = conectarDB();
 
-use App\ActiveRecord;
+use Model\ActiveRecord;
 
 /** Importar Clase */
 
