@@ -31,6 +31,15 @@ class Router
 
     /** Muestra una vista */
     public function render($view) {
+
+        /** Guardar en memoria a que le estamos dando render y eso va a almacenar en la variable de $contenido.*/
+        ob_start();
         include __DIR__ . '/views/' . $view . '.php';
+
+        /** Limpiar memoria */
+        $contenido = ob_get_clean();
+
+        /** esta variable que está como $contenido se va a inyectar automáticamente justo en esta parte de nuestro layout.php (Master page) */
+        include __DIR__ . '/views/layout.php';
     }
 }
