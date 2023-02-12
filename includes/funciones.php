@@ -29,15 +29,40 @@ function estaAutenticado()
 }
 
 /** Escapa el HTML */
-function s($html) : string
+function s($html): string
 {
     $s = htmlspecialchars($html);
     return $s;
 }
 
 /** Validar tipo de contenido */
-function validarTipoContenido($tipo) {
+function validarTipoContenido($tipo)
+{
     $tipos = ['vendedor', 'propiedad'];
 
-    return in_array($tipo, $tipos); /** buscar un string dentro de un arreglo o un valor dentro de un arreglo. Toma dos valores, lo que vamos a buscar y el segundo es el arreglo donde lo va a buscar. */
+    return in_array($tipo, $tipos);
+    /** buscar un string dentro de un arreglo o un valor dentro de un arreglo. Toma dos valores, lo que vamos a buscar y el segundo es el arreglo donde lo va a buscar. */
+}
+
+/** Mostrar Mensajes */
+function mostrarNotificacion($codigo)
+{
+    $mensaje = '';
+
+    switch ($codigo) {
+        case 1:
+            $mensaje = 'Creado Correctamente';
+            break;
+        case 2:
+            $mensaje = 'Actualizado Correctamente';
+            break;
+        case 3:
+            $mensaje = 'Eliminado Correctamente';
+            break;
+        default:
+            $mensaje = '';
+            break;
+    }
+
+    return $mensaje;
 }
