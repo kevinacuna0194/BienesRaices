@@ -5,6 +5,11 @@ define('TEMPLATES_URL', __DIR__ . '/templates');
 define('FUNCIONES_URL', __DIR__ . 'funciones.php');
 define('CARPETA_IMAGENES', $_SERVER['DOCUMENT_ROOT'] . '/imagenes/');
 
+/*
+debuguear($_SERVER['DOCUMENT_ROOT']);
+string(36) "C:\Apache\htdocs\bienesraices\public"
+*/
+
 function incluirTemplate(string $nombre, bool $inicio = false)
 {
     /* echo TEMPLATES_URL . "/${nombre}.php"; C:\Apache\htdocs\bienesraices\includes/templates/header.php */
@@ -65,4 +70,16 @@ function mostrarNotificacion($codigo)
     }
 
     return $mensaje;
+}
+
+function validarORedireccionar(string $url)
+{
+    $id = $_GET['id'];
+    $id = filter_var($id, FILTER_VALIDATE_INT);
+
+    if (!$id) {
+        header("Location: {$url}");
+    }
+
+    return $id;
 }

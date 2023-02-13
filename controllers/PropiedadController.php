@@ -26,6 +26,7 @@ class PropiedadController
     {
         $propiedad = new Propiedad();
         $vendedores = Vendedor::all();
+
         // Arreglo con mensajes de errores
         $errores = Propiedad::getErrores();
 
@@ -42,11 +43,6 @@ class PropiedadController
                 $image = Image::make($_FILES['propiedad']['tmp_name']['imagen'])->fit(800, 600);
                 $propiedad->setImagen($nombreImagen);
             }
-
-            /*
-            debuguear($_SERVER['DOCUMENT_ROOT']);
-            string(36) "C:\Apache\htdocs\bienesraices\public"
-            */
 
             // Validar
             $errores = $propiedad->validar();
@@ -73,8 +69,20 @@ class PropiedadController
         ]);
     }
 
-    public static function actualizar()
+    public static function actualizar(Router $router)
     {
-        echo "Actualizar Propiedad";
+        $id = validarORedireccionar('/admin');
+        $propiedad = Propiedad::find($id);
+
+        $vendedores = Vendedor::all();
+
+        // Validar
+        $errores = Propiedad::getErrores();
+        
+        $router->render('propiedades/actualizar', [
+            'propiedad' => $propiedad,
+            'errores' => $errores,
+            'vendedores' => $vendedores
+        ]);
     }
 }
