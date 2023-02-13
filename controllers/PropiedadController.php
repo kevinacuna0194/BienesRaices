@@ -1,6 +1,7 @@
 <?php
 
 namespace Controllers;
+
 use MVC\Router;
 use Model\Propiedad;
 use Model\Vendedor;
@@ -11,7 +12,7 @@ class PropiedadController
     {
         $propiedades = Propiedad::all();
         $resultado = null;
- 
+
         $router->render('propiedades/admin', [
             'propiedades' => $propiedades,
             'resultado' => $resultado
@@ -22,6 +23,10 @@ class PropiedadController
     {
         $propiedad = new Propiedad();
         $vendedores = Vendedor::all();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            debuguear($_POST);
+        }
 
         $router->render('propiedades/crear', [
             'propiedad' => $propiedad,

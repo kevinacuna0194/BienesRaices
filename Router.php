@@ -12,6 +12,10 @@ class Router
         $this->rutasGET[$url] = $fn;
     }
 
+    public function post($url, $fn) {
+        $this->rutasPOST[$url] = $fn;
+    }
+
     public function comprobarRutas()
     {
         $urlActual = $_SERVER['PATH_INFO'] ?? '/';
@@ -19,6 +23,9 @@ class Router
 
         if ($metodo === 'GET') {
             $fn = $this->rutasGET[$urlActual];
+        } else {
+            debuguear($_POST);
+            $fn = $this->rutasPOST[$urlActual];
         }
 
         /** La URL existe y hay una función asociada */
