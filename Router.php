@@ -30,7 +30,11 @@ class Router
     }
 
     /** Muestra una vista */
-    public function render($view) {
+    public function render($view, $datos = [])
+    {
+        foreach ($datos as $key => $value) {
+            $$key = $value;
+        }
 
         /** Guardar en memoria a que le estamos dando render y eso va a almacenar en la variable de $contenido.*/
         ob_start();
