@@ -1,5 +1,4 @@
-# Bienes Raices :pencil:
-:pencil:
+# Bienes Raices :bookmark_tabs:
 ~~~
 Proyecto para ventas de casas y departamentos exclusivos de lujo con AMP (Apache, MySql y PHP).
 ~~~
