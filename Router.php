@@ -24,7 +24,6 @@ class Router
         if ($metodo === 'GET') {
             $fn = $this->rutasGET[$urlActual];
         } else {
-            debuguear($_POST);
             $fn = $this->rutasPOST[$urlActual];
         }
 
