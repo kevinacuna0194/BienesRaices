@@ -46,7 +46,7 @@ class VendedorController
 
             // Asignar los atributos
             $args = $_POST['vendedor'];
-            
+
             $vendedor->sincronizar($args);
 
             // Validación
@@ -65,6 +65,20 @@ class VendedorController
 
     public static function eliminar()
     {
-        echo 'Eliminar Vendedor';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            /** Valiar el id */
+            $id = $_POST['id'];
+            $id = filter_var($id, FILTER_VALIDATE_INT);
+
+            if ($id) {
+                /** Validar el tipo a eliminar */
+                $tipo = $_POST['tipo'];
+
+                if (validarTipoContenido($tipo)) {
+                    $vendedor = Vendedor::find($id);
+                    $vendedor->eliminar();
+                }
+            }
+        }
     }
 }
