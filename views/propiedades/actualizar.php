@@ -9,7 +9,7 @@
 
     <a href="/admin" class="boton boton-verde">Volver</a>
 
-    <form class="formulario" method="POST" action="/vendeores/actualizar">
+    <form class="formulario" method="POST">
         <?php include __DIR__ . '/formulario.php'; ?>
 
         <input type="submit" value="Actualizar Propiedad" class="boton boton-verde">
