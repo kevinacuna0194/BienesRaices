@@ -115,4 +115,22 @@ class PropiedadController
             'vendedores' => $vendedores
         ]);
     }
+
+    public function eliminar()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Leer el id
+            $id = $_POST['id'];
+            $id = filter_var($id, FILTER_VALIDATE_INT);
+
+            $tipo = $_POST['tipo'];
+
+            // peticiones validas
+            if (validarTipoContenido($tipo)) {
+                // encontrar y eliminar la propiedad
+                $propiedad = Propiedad::find($id);
+                $propiedad->eliminar();
+            }
+        }
+    }
 }
