@@ -46,12 +46,11 @@ class VendedorController
 
             // Asignar los atributos
             $args = $_POST['vendedor'];
-
+            
             $vendedor->sincronizar($args);
 
             // Validación
             $errores = $vendedor->validar();
-
 
             if (empty($errores)) {
                 $vendedor->guardar();
