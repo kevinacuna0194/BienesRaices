@@ -1,16 +1,31 @@
 <?php
 
 namespace Controllers;
+
 use MVC\Router;
 use Model\Vendedor;
 
-class VendedorController {
+class VendedorController
+{
 
-    public static function crear(Router $router) {
-
+    public static function crear(Router $router)
+    {
         $errores = Vendedor::getErrores();
 
         $vendedor = new Vendedor;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            /** Crea una nueva instancia */
+            $vendedor = new Vendedor($_POST['vendedor']);
+
+            // Validar
+            $errores = $vendedor->validar();
+
+            if (empty($errores)) {
+                $vendedor->guardar();
+            }
+        }
 
         $router->render('vendedores/crear', [
             'errores' => $errores,
@@ -18,11 +33,13 @@ class VendedorController {
         ]);
     }
 
-    public static function actualizar() {
-        echo 'Actualizar Vendedor';
+    public static function actualizar(Router $router)
+    {
+        
     }
 
-    public static function eliminar() {
+    public static function eliminar()
+    {
         echo 'Eliminar Vendedor';
     }
 }
