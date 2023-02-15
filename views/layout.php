@@ -33,14 +33,14 @@ $auth = $_SESSION['login'] ?? false;
                 <div class="derecha">
                     <img class="dark-mode-boton" src="/build/img/dark-mode.svg">
                     <nav class="navegacion">
-                        <a href="nosotros.php">Nosotros</a>
-                        <a href="anuncios.php">Anuncios</a>
-                        <a href="blog.php">Blog</a>
-                        <a href="contacto.php">Contacto</a>
+                        <a href="/nosotros">Nosotros</a>
+                        <a href="/anuncios">Anuncios</a>
+                        <a href="/blog">Blog</a>
+                        <a href="/contacto">Contacto</a>
                         <?php if ($auth) : ?>
-                            <a href="/cerrar-sesion.php">Cerrar Sesión</a>
+                            <a href="/cerrar-sesion">Cerrar Sesión</a>
                         <?php elseif (!$auth) : ?>
-                            <a href="/login.php">Iniciar Sesión</a>
+                            <a href="/login">Iniciar Sesión</a>
                         <?php endif; ?>
                     </nav>
                 </div>
@@ -55,19 +55,19 @@ $auth = $_SESSION['login'] ?? false;
     <?php echo $contenido; ?>
 
     <footer class="footer seccion">
-    <div class="contenedor contenedor-footer">
-        <nav class="navegacion">
-            <a href="nosotros.html">Nosotros</a>
-            <a href="anuncios.html">Anuncios</a>
-            <a href="blog.html">Blog</a>
-            <a href="contacto.html">Contacto</a>
-        </nav>
-    </div>
+        <div class="contenedor contenedor-footer">
+            <nav class="navegacion">
+                <a href="nosotros.html">Nosotros</a>
+                <a href="anuncios.html">Anuncios</a>
+                <a href="blog.html">Blog</a>
+                <a href="contacto.html">Contacto</a>
+            </nav>
+        </div>
 
-    <p class="copyright">Todos los derechos Reservados <?php echo date('Y'); ?> &copy;</p>
-</footer>
+        <p class="copyright">Todos los derechos Reservados <?php echo date('Y'); ?> &copy;</p>
+    </footer>
 
-<script src="../build/js/bundle.min.js"></script>
+    <script src="/build/js/bundle.min.js"></script>
 </body>
 
 </html>

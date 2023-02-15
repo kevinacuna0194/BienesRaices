@@ -2,11 +2,20 @@
 
 namespace Controllers;
 
+use MVC\Router;
+use Model\Propiedad;
+
 class PaginasControllers
 {
-    public static function index()
-    {
-        echo "desde el Index...";
+    public static function index(Router $router)
+    {   
+        $propiedades = Propiedad::get(3);
+        $inicio = true;
+
+        $router->render('paginas/index', [
+            'propiedades' => $propiedades,
+            'inicio' => $inicio
+        ]);
     }
 
     public static function nosotros()
@@ -18,7 +27,7 @@ class PaginasControllers
     {
         echo "desde el propiedades...";
     }
-    
+
     public static function propiedad()
     {
         echo "desde el propiedad...";
