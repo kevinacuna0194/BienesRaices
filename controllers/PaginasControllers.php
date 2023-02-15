@@ -43,14 +43,14 @@ class PaginasControllers
         ]);
     }
 
-    public static function blog()
+    public static function blog(Router $router)
     {
-        echo "desde el blog...";
+        $router->render('paginas/blog');
     }
 
-    public static function entrada()
+    public static function entrada(Router $router)
     {
-        echo "desde el entrada...";
+        $router->render('paginas/entrada');
     }
 
     public static function contacto()
