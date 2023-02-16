@@ -58,6 +58,8 @@ class PaginasControllers
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+            $mensaje = null;
+
             $respuestas = $_POST['contacto'];
 
             /** Crar instancia de PHPMailer */
@@ -83,28 +85,38 @@ class PaginasControllers
 
             /** Definir el contenido */
             $contenido = '<html>';
-            $contenido .= '<p><bold>Tienes un nuevo mensaje:</bold></p>';
+            $contenido .= '<p><strong>Tienes un nuevo mensaje:</strong></p>';
             $contenido .= '<p>Nombre: ' . $respuestas['nombre'] . ' </p>';
-            $contenido .= '<p>Email: ' . $respuestas['email'] . ' </p>';
-            $contenido .= '<p>Teléfono: ' . $respuestas['telefono'] . ' </p>';
-            $contenido .= '<p>Mensaje: ' . $respuestas['mensaje'] . ' </p>';
-            $contenido .= '<p>Vende o Compra: ' . $respuestas['tipo'] . ' </p>';
-            $contenido .= '<p>Precio o Presupuesto: $ ' . $respuestas['precio'] . ' </p>';
-            $contenido .= '<p>Prefiere ser contactado por: ' . $respuestas['contacto'] . ' </p>';
-            $contenido .= '<p>Fecha Contacto: ' . $respuestas['fecha'] . ' </p>';
-            $contenido .= '<p>Hora: ' . $respuestas['hora'] . ' </p>';
+
+            /** Enviar de forma condicional, algunos campos de email o teléfono */
+            if ($respuestas['contacto'] === 'telefono') {
+                $contenido .= '<p><strong>Eligió ser contactado por Teléfono:</strong></p>';
+                $contenido .= '<p>Teléfono: ' . $respuestas['telefono'] . '</p>';
+                $contenido .= '<p>Fecha Contacto: ' . $respuestas['fecha'] . '</p>';
+                $contenido .= '<p>Hora: ' . $respuestas['hora'] . '</p>';
+            } else {
+                /** Eligio Email */
+                $contenido .= '<p><strong>Eligió ser contactado por Email:</strong></p>';
+                $contenido .= '<p>Email: ' . $respuestas['email'] . '</p>';
+            }
+
+            $contenido .= '<p>Mensaje: ' . $respuestas['mensaje'] . '</p>';
+            $contenido .= '<p>Vende o Compra: ' . $respuestas['tipo'] . '</p>';
+            $contenido .= '<p>Precio o Presupuesto: $ ' . $respuestas['precio'] . '</p>';
             $contenido .= '</html>';
 
             $phpmailer->Body = $contenido;
             $phpmailer->AltBody = 'Texto alternativo sin HTML';
 
             if ($phpmailer->send()) {
-                echo "Mensaje enviado Correctamente";
+                $mensaje = "Mensaje enviado Correctamente";
             } else {
-                echo "El mensaje no se puedo enviar, Mailer Error: {$phpmailer->ErrorInfo}";
+                $mensaje = "El mensaje no se puedo enviar, Mailer Error: {$phpmailer->ErrorInfo}";
             }
         }
 
-        $router->render('paginas/contacto', []);
+        $router->render('paginas/contacto', [
+            'mensaje' => $mensaje
+        ]);
     }
 }
