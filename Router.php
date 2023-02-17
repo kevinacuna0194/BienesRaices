@@ -18,6 +18,22 @@ class Router
 
     public function comprobarRutas()
     {
+        session_start();
+
+        /*
+        array(2) {
+        ["usuario"]=>
+        string(17) "correo@correo.com"
+        ["login"]=>
+        bool(true)
+        }
+        */
+
+        $auth = $_SESSION['login'] ?? null;
+
+        /** Arreglo de rutas protegidas */
+        $rutas_protegidas = ['/admin', '/propiedades/crear', '/propiedades/actualizar', '/propiedades/eliminar', '/vendedores/crear', '/vendedores/actualizar', '/vendedores/eliminar'];
+
         $urlActual = $_SERVER['PATH_INFO'] ?? '/';
         $metodo = $_SERVER['REQUEST_METHOD'];
 
@@ -25,6 +41,10 @@ class Router
             $fn = $this->rutasGET[$urlActual];
         } else {
             $fn = $this->rutasPOST[$urlActual];
+        }
+
+        if (in_array($urlActual, $rutas_protegidas) && !$auth) {
+            header('location: /');
         }
 
         /** La URL existe y hay una función asociada */
