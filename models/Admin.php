@@ -46,4 +46,17 @@ class Admin extends ActiveRecord
 
         return $resultado;
     }
+
+    public function comprobarPassword($resultado) {
+        /** A estas alturas existe un usuario */
+        $usuario = $resultado->fetch_object();
+
+        $autenticado = password_verify($this->password, $usuario->password);
+
+        if (!$autenticado) {
+            self::$errores[] = 'El Password es incorrecto';
+        }
+
+        return $autenticado;
+    }
 }
