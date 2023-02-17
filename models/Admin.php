@@ -47,7 +47,8 @@ class Admin extends ActiveRecord
         return $resultado;
     }
 
-    public function comprobarPassword($resultado) {
+    public function comprobarPassword($resultado)
+    {
         /** A estas alturas existe un usuario */
         $usuario = $resultado->fetch_object();
 
@@ -58,5 +59,16 @@ class Admin extends ActiveRecord
         }
 
         return $autenticado;
+    }
+
+    public function autenticar()
+    {
+        session_start();
+
+        /** Llenar el arreglo $_SESSION */
+        $_SESSION['usuario'] = $this->email;
+        $_SESSION['login'] = true;
+
+        header('location: /admin');
     }
 }
